@@ -38,7 +38,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.hugo-blog }}  # 使用个人访问令牌
+          token: ${{ secrets.GITHUB_TOKEN }}  # 使用个人访问令牌
           repository: Pu-Miao/Pu-Miao.github.io
           submodules: recursive
           fetch-depth: 0
