@@ -1,0 +1,29 @@
+baseURL = "https://itwp.cn"
+title = "Miao16"
+theme = "hugo-theme-ladder"
+homepage = "https://itwp.cn"
+defaultContentLanguage = "zh"
+paginate = 10
+
+[params]
+brand = "主页"
+author = "Miao16"
+authorDescription = "阅读｜思考｜产出｜进步"
+info = "从未停止对未知的探索，尝试分享一些有趣的东西"
+darkModeTheme = "data-dark-mode"
+favicon = "/images/avatar.png"
+
+  [params.options]
+  showDarkMode = true
+  enableImgZooming = true
+  enableMultiLang = true
+
+[[menu.main]]
+  name = "文章"
+  url = "/blog/"
+  weight = 1
+
+[[menu.main]]
+  name = "文档"
+  url = "/archive/"
+  weight = 2
