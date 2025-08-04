@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Miao16</title>
+<meta name="keywords" content="">
+<meta name="description" content="欢迎来到我的个人技术博客，分享编程、技术和生活的点点滴滴">
+<meta name="author" content="Your Name">
+<link rel="canonical" href="https://www.itwp.cn/categories/k8s/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://www.itwp.cn/imag/OIP.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://www.itwp.cn/imag/OIP.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://www.itwp.cn/imag/OIP.png">
+<link rel="apple-touch-icon" href="https://www.itwp.cn/imag/OIP.png">
+<link rel="mask-icon" href="https://www.itwp.cn/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://www.itwp.cn/categories/k8s/index.xml">
+<link rel="alternate" hreflang="en" href="https://www.itwp.cn/categories/k8s/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:url" content="https://www.itwp.cn/categories/k8s/">
+  <meta property="og:site_name" content="Miao16">
+  <meta property="og:title" content="Miao16">
+  <meta property="og:description" content="欢迎来到我的个人技术博客，分享编程、技术和生活的点点滴滴">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="欢迎来到我的个人技术博客，分享编程、技术和生活的点点滴滴">
+
+</head>
+
+<body class="list" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://www.itwp.cn/" accesskey="h" title="Miao16 (Alt + H)">Miao16</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://www.itwp.cn/categories/aigc/" title="AIGC">
+                    <span>AIGC</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/categories/k8s/" title="K8S">
+                    <span class="active">K8S</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/categories/pxe/" title="PXE">
+                    <span>PXE</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/categories/tools/" title="常用工具">
+                    <span>常用工具</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/archives/" title="归档">
+                    <span>归档</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main"> 
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Kubernetes集群部署与管理实战指南
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Kubernetes概述 Kubernetes（简称K8s）是一个开源的容器编排平台，用于自动化部署、扩展和管理容器化应用程序。它已成为现代云原生应用的事实标准。
+环境准备 系统要求 操作系统: Ubuntu 20.04&#43; / CentOS 7&#43; / RHEL 8&#43; 内存: 每个节点至少2GB RAM CPU: 每个节点至少2核CPU 网络: 节点间网络互通 存储: 每个节点至少20GB可用磁盘空间 预安装配置 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 # 1. 关闭swap sudo swapoff -a sudo sed -i &#39;/ swap / s/^\(.*\)$/#\1/g&#39; /etc/fstab # 2. 配置主机名解析 cat &gt;&gt; /etc/hosts &lt;&lt; EOF 192.168.1.10 k8s-master 192.168.1.11 k8s-node1 192.168.1.12 k8s-node2 EOF # 3. 配置内核参数 cat &gt; /etc/sysctl.d/k8s.conf &lt;&lt; EOF net.bridge.bridge-nf-call-ip6tables = 1 net.bridge.bridge-nf-call-iptables = 1 net.ipv4.ip_forward = 1 EOF sudo sysctl --system 安装Container Runtime 使用containerd 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 # 1. 安装containerd curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - sudo add-apt-repository &#34;deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&#34; sudo apt-get update sudo apt-get install -y containerd.io # 2. 配置containerd sudo mkdir -p /etc/containerd containerd config default | sudo tee /etc/containerd/config.toml # 3. 修改配置启用systemd cgroup driver sudo sed -i &#39;s/SystemdCgroup = false/SystemdCgroup = true/&#39; /etc/containerd/config.toml # 4. 重启containerd sudo systemctl restart containerd sudo systemctl enable containerd 安装Kubernetes组件 安装kubeadm、kubelet、kubectl 1 2 3 4 5 6 7 8 9 10 11 12 13 # 1. 添加Kubernetes APT仓库 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add - cat &lt;&lt; EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list deb https://apt.kubernetes.io/ kubernetes-xenial main EOF # 2. 安装组件 sudo apt-get update sudo apt-get install -y kubelet kubeadm kubectl sudo apt-mark hold kubelet kubeadm kubectl # 3. 启用kubelet sudo systemctl enable kubelet 初始化Master节点 集群初始化 1 2 3 4 5 6 7 8 9 10 11 12 13 14 # 1. 初始化集群 sudo kubeadm init \ --pod-network-cidr=10.244.0.0/16 \ --control-plane-endpoint=k8s-master \ --upload-certs # 2. 配置kubectl mkdir -p $HOME/.kube sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config sudo chown $(id -u):$(id -g) $HOME/.kube/config # 3. 验证集群状态 kubectl get nodes kubectl get pods -n kube-system 安装网络插件 1 2 3 4 5 # 使用Flannel网络插件 kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml # 或者使用Calico网络插件 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml 添加Worker节点 1 2 3 4 5 6 7 # 在Worker节点上执行（从Master节点初始化输出中获取命令） sudo kubeadm join k8s-master:6443 \ --token &lt;token&gt; \ --discovery-token-ca-cert-hash sha256:&lt;hash&gt; # 在Master节点验证节点加入 kubectl get nodes 应用部署示例 1. 部署Nginx应用 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 # nginx-deployment.yaml apiVersion: apps/v1 kind: Deployment metadata: name: nginx-deployment labels: app: nginx spec: replicas: 3 selector: matchLabels: app: nginx template: metadata: labels: app: nginx spec: containers: - name: nginx image: nginx:1.21 ports: - containerPort: 80 resources: requests: memory: &#34;64Mi&#34; cpu: &#34;250m&#34; limits: memory: &#34;128Mi&#34; cpu: &#34;500m&#34; --- apiVersion: v1 kind: Service metadata: name: nginx-service spec: selector: app: nginx ports: - protocol: TCP port: 80 targetPort: 80 type: ClusterIP 1 2 3 4 5 6 7 # 部署应用 kubectl apply -f nginx-deployment.yaml # 查看部署状态 kubectl get deployments kubectl get pods kubectl get services 2. 创建Ingress配置 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 # nginx-ingress.yaml apiVersion: networking.k8s.io/v1 kind: Ingress metadata: name: nginx-ingress annotations: nginx.ingress.kubernetes.io/rewrite-target: / spec: rules: - host: nginx.itwp.cn http: paths: - path: / pathType: Prefix backend: service: name: nginx-service port: number: 80 集群监控 部署Prometheus和Grafana 1 2 3 4 5 6 7 8 9 10 11 12 # 1. 创建监控命名空间 kubectl create namespace monitoring # 2. 使用Helm安装Prometheus Stack helm repo add prometheus-community https://prometheus-community.github.io/helm-charts helm repo update helm install prometheus prometheus-community/kube-prometheus-stack \ --namespace monitoring \ --set prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage=10Gi \ --set grafana.persistence.enabled=true \ --set grafana.persistence.size=5Gi 访问监控界面 1 2 3 4 5 6 7 8 9 10 11 # 获取Grafana密码 kubectl get secret --namespace monitoring prometheus-grafana \ -o jsonpath=&#34;{.data.admin-password}&#34; | base64 --decode # 端口转发访问Grafana kubectl port-forward --namespace monitoring \ svc/prometheus-grafana 3000:80 # 访问 http://localhost:3000 # 用户名: admin # 密码: 上一步获取的密码 常用命令备忘 集群管理 1 2 3 4 5 6 7 8 9 10 11 12 # 查看集群信息 kubectl cluster-info kubectl get nodes -o wide # 查看命名空间 kubectl get namespaces # 查看所有资源 kubectl get all --all-namespaces # 查看事件 kubectl get events --sort-by=.metadata.creationTimestamp Pod管理 1 2 3 4 5 6 7 8 9 10 11 # 查看Pod详情 kubectl describe pod &lt;pod-name&gt; # 进入Pod容器 kubectl exec -it &lt;pod-name&gt; -- /bin/bash # 查看日志 kubectl logs &lt;pod-name&gt; -f # 端口转发 kubectl port-forward &lt;pod-name&gt; 8080:80 故障排查 1 2 3 4 5 6 7 8 9 10 11 12 # 查看Pod状态 kubectl get pods -o wide # 查看Pod日志 kubectl logs &lt;pod-name&gt; --previous # 查看节点资源使用 kubectl top nodes kubectl top pods # 查看集群事件 kubectl get events --sort-by=&#39;.lastTimestamp&#39; 配置持久化存储 创建StorageClass 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 # local-storage.yaml apiVersion: storage.k8s.io/v1 kind: StorageClass metadata: name: local-storage provisioner: kubernetes.io/no-provisioner volumeBindingMode: WaitForFirstConsumer --- apiVersion: v1 kind: PersistentVolume metadata: name: local-pv spec: capacity: storage: 10Gi accessModes: - ReadWriteOnce persistentVolumeReclaimPolicy: Retain storageClassName: local-storage local: path: /mnt/disks/vol1 nodeAffinity: required: nodeSelectorTerms: - matchExpressions: - key: kubernetes.io/hostname operator: In values: - k8s-node1 安全配置 RBAC权限管理 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 # rbac-config.yaml apiVersion: v1 kind: ServiceAccount metadata: name: dev-user namespace: default --- apiVersion: rbac.authorization.k8s.io/v1 kind: Role metadata: namespace: default name: pod-reader rules: - apiGroups: [&#34;&#34;] resources: [&#34;pods&#34;] verbs: [&#34;get&#34;, &#34;watch&#34;, &#34;list&#34;] --- apiVersion: rbac.authorization.k8s.io/v1 kind: RoleBinding metadata: name: read-pods namespace: default subjects: - kind: ServiceAccount name: dev-user namespace: default roleRef: kind: Role name: pod-reader apiGroup: rbac.authorization.k8s.io 备份和恢复 etcd备份 1 2 3 4 5 6 7 8 9 # 备份etcd数据 ETCDCTL_API=3 etcdctl snapshot save backup.db \ --endpoints=https://127.0.0.1:2379 \ --cacert=/etc/kubernetes/pki/etcd/ca.crt \ --cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt \ --key=/etc/kubernetes/pki/etcd/healthcheck-client.key # 验证备份 ETCDCTL_API=3 etcdctl snapshot status backup.db 最佳实践 1. 资源限制 1 2 3 4 5 6 7 resources: requests: memory: &#34;64Mi&#34; cpu: &#34;250m&#34; limits: memory: &#34;128Mi&#34; cpu: &#34;500m&#34; 2. 健康检查 1 2 3 4 5 6 7 8 9 10 11 12 13 livenessProbe: httpGet: path: /health port: 8080 initialDelaySeconds: 30 periodSeconds: 10 readinessProbe: httpGet: path: /ready port: 8080 initialDelaySeconds: 5 periodSeconds: 5 3. 配置管理 1 2 3 4 5 # 使用ConfigMap存储配置 kubectl create configmap app-config --from-file=config.properties # 使用Secret存储敏感信息 kubectl create secret generic app-secret --from-literal=password=secret123 故障排查指南 问题 可能原因 解决方案 Pod状态为Pending 资源不足或调度失败 检查节点资源，查看调度事件 Pod状态为CrashLoopBackOff 应用启动失败 查看容器日志，检查健康检查 Service无法访问 网络配置问题 检查Service和Pod标签匹配 节点NotReady kubelet或网络问题 重启kubelet，检查网络插件 升级和维护 集群升级步骤 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 # 1. 升级kubeadm sudo apt-mark unhold kubeadm sudo apt-get update &amp;&amp; sudo apt-get install -y kubeadm=1.28.x-00 sudo apt-mark hold kubeadm # 2. 升级控制平面 sudo kubeadm upgrade plan sudo kubeadm upgrade apply v1.28.x # 3. 升级kubelet和kubectl sudo apt-mark unhold kubelet kubectl sudo apt-get update &amp;&amp; sudo apt-get install -y kubelet=1.28.x-00 kubectl=1.28.x-00 sudo apt-mark hold kubelet kubectl sudo systemctl daemon-reload sudo systemctl restart kubelet 总结 Kubernetes集群的部署和管理需要系统性的规划和持续的维护。掌握这些核心技能对于现代应用的容器化部署至关重要。
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-07-31 16:30:00 +0800 CST'>2025年07月31日</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;1117 words&nbsp;·&nbsp;Your Name</footer>
+  <a class="entry-link" aria-label="post link to Kubernetes集群部署与管理实战指南" href="https://www.itwp.cn/posts/k8s-deployment-guide/"></a>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://www.itwp.cn/">Miao16</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
