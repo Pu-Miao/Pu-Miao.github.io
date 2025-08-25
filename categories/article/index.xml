@@ -23,11 +23,32 @@
       <description>在openEuler 22.03 SP3系统中解决nvidia-peermem模块无法加载导致GDR功能不可用的问题</description>
     </item>
     <item>
+      <title>Windows Server网卡Bond配置指南</title>
+      <link>https://www.itwp.cn/categories/article/windows-bond/</link>
+      <pubDate>Mon, 02 Dec 2024 16:00:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/article/windows-bond/</guid>
+      <description>详细介绍如何在Windows Server中使用PowerShell创建网卡Bond（网络组），包括VLAN配置和故障排除</description>
+    </item>
+    <item>
       <title>NVIDIA DCGM01</title>
       <link>https://www.itwp.cn/categories/article/dcgm01/</link>
       <pubDate>Wed, 05 Jun 2024 17:38:00 +0800</pubDate>
       <guid>https://www.itwp.cn/categories/article/dcgm01/</guid>
       <description>详细介绍NVIDIA数据中心GPU管理器(DCGM)的安装、配置和使用，包括GPU监控、健康检查、性能诊断等核心功能</description>
+    </item>
+    <item>
+      <title>系统下屏蔽GPU显卡</title>
+      <link>https://www.itwp.cn/categories/article/no_gpu/</link>
+      <pubDate>Mon, 20 Nov 2023 15:00:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/article/no_gpu/</guid>
+      <description>本文用于进行故障诊断如何临时屏蔽某张GPU显卡</description>
+    </item>
+    <item>
+      <title>Ubuntu NVIDIA驱动部署</title>
+      <link>https://www.itwp.cn/categories/article/ubuntu-nvidia/</link>
+      <pubDate>Thu, 24 Aug 2023 17:00:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/article/ubuntu-nvidia/</guid>
+      <description>在Ubuntu系统上部署NVIDIA驱动、CUDA和相关服务配置</description>
     </item>
   </channel>
 </rss>

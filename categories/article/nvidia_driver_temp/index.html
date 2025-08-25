@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Miao16</title>
+<meta name="keywords" content="">
+<meta name="description" content="计算环境部署文档
+Ubuntu
+基础环境准备
+系统优化
+锁内核：
+apt-mark hold linux-generic linux-image-generic linux-headers-generic
+关闭自动更新：
+sudo sed -i.bak &#39;s/1/0/&#39; /etc/apt/apt.conf.d/10periodic &amp;&gt; /dev/null
+sudo sed -i.bak &#39;s/1/0/&#39; /etc/apt/apt.conf.d/20auto-upgrades &amp;&gt;
+/dev/null
+依赖安装
+apt install gcc make -y
+驱动下载
+Nvidia drive 下载
+官方链接：https://www.nvidia.cn/drivers/lookup/
+根据个人的版本需求进行下载，下载后会获得一个run包，直接上传到服务器即可
+{width=&ldquo;1.8180555555555555in&rdquo;
+height=&ldquo;1.8972222222222221in&rdquo;}
+Cuda 下载（根据实际版本）
+官方链接：https://developer.nvidia.com/cuda-downloads
+根据个人的版本需求进行下载，下载后会获得一个run包，直接上传到服务器即可
+{width=&ldquo;5.763888888888889in&rdquo;
+height=&ldquo;3.448611111111111in&rdquo;}
+Nvidia fabricmanager 下载（根据实际操作系统修改/SXM需要，PCIE不需要）
+
+wget
+https://developer.download.nvidia.cn/compute/cuda/repos/ubuntu2004/x86_64/nvidia-fabricmanager-535_535.154.05-1_amd64.deb
+驱动安装
+Nvidia Drvie(根据实际版本修改)
+./NVIDIA-Linux-x86_64-535.154.05.run \
+--ui=none \ # 禁用图形界面（纯命令行模式）
+--no-questions \ # 跳过所有交互式提问（自动确认）
+--accept-license \ # 自动接受许可协议
+--disable-nouveau \ # 禁用开源驱动 Nouveau">
+<meta name="author" content="Miao16">
+<link rel="canonical" href="http://localhost:1313/categories/article/nvidia_driver_temp/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/imag/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/imag/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/imag/favicon.ico">
+<link rel="apple-touch-icon" href="http://localhost:1313/imag/favicon.ico">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/categories/article/nvidia_driver_temp/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:url" content="http://localhost:1313/categories/article/nvidia_driver_temp/">
+  <meta property="og:site_name" content="Miao16">
+  <meta property="og:title" content="Miao16">
+  <meta property="og:description" content="计算环境部署文档
+Ubuntu 基础环境准备 系统优化 锁内核：
+apt-mark hold linux-generic linux-image-generic linux-headers-generic
+关闭自动更新：
+sudo sed -i.bak &#39;s/1/0/&#39; /etc/apt/apt.conf.d/10periodic &amp;&gt; /dev/null
+sudo sed -i.bak &#39;s/1/0/&#39; /etc/apt/apt.conf.d/20auto-upgrades &amp;&gt; /dev/null
+依赖安装 apt install gcc make -y
+驱动下载 Nvidia drive 下载 官方链接：https://www.nvidia.cn/drivers/lookup/
+根据个人的版本需求进行下载，下载后会获得一个run包，直接上传到服务器即可
+{width=“1.8180555555555555in” height=“1.8972222222222221in”}
+Cuda 下载（根据实际版本） 官方链接：https://developer.nvidia.com/cuda-downloads
+根据个人的版本需求进行下载，下载后会获得一个run包，直接上传到服务器即可
+{width=“5.763888888888889in” height=“3.448611111111111in”}
+Nvidia fabricmanager 下载（根据实际操作系统修改/SXM需要，PCIE不需要） wget https://developer.download.nvidia.cn/compute/cuda/repos/ubuntu2004/x86_64/nvidia-fabricmanager-535_535.154.05-1_amd64.deb
+驱动安装 Nvidia Drvie(根据实际版本修改) ./NVIDIA-Linux-x86_64-535.154.05.run \
+--ui=none \ # 禁用图形界面（纯命令行模式）
+--no-questions \ # 跳过所有交互式提问（自动确认）
+--accept-license \ # 自动接受许可协议
+--disable-nouveau \ # 禁用开源驱动 Nouveau">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="categories">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="">
+<meta name="twitter:description" content="计算环境部署文档
+Ubuntu
+基础环境准备
+系统优化
+锁内核：
+apt-mark hold linux-generic linux-image-generic linux-headers-generic
+关闭自动更新：
+sudo sed -i.bak &#39;s/1/0/&#39; /etc/apt/apt.conf.d/10periodic &amp;&gt; /dev/null
+sudo sed -i.bak &#39;s/1/0/&#39; /etc/apt/apt.conf.d/20auto-upgrades &amp;&gt;
+/dev/null
+依赖安装
+apt install gcc make -y
+驱动下载
+Nvidia drive 下载
+官方链接：https://www.nvidia.cn/drivers/lookup/
+根据个人的版本需求进行下载，下载后会获得一个run包，直接上传到服务器即可
+{width=&ldquo;1.8180555555555555in&rdquo;
+height=&ldquo;1.8972222222222221in&rdquo;}
+Cuda 下载（根据实际版本）
+官方链接：https://developer.nvidia.com/cuda-downloads
+根据个人的版本需求进行下载，下载后会获得一个run包，直接上传到服务器即可
+{width=&ldquo;5.763888888888889in&rdquo;
+height=&ldquo;3.448611111111111in&rdquo;}
+Nvidia fabricmanager 下载（根据实际操作系统修改/SXM需要，PCIE不需要）
+
+wget
+https://developer.download.nvidia.cn/compute/cuda/repos/ubuntu2004/x86_64/nvidia-fabricmanager-535_535.154.05-1_amd64.deb
+驱动安装
+Nvidia Drvie(根据实际版本修改)
+./NVIDIA-Linux-x86_64-535.154.05.run \
+--ui=none \ # 禁用图形界面（纯命令行模式）
+--no-questions \ # 跳过所有交互式提问（自动确认）
+--accept-license \ # 自动接受许可协议
+--disable-nouveau \ # 禁用开源驱动 Nouveau">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Categories",
+      "item": "http://localhost:1313/categories/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "article",
+      "item": "http://localhost:1313/categories/article/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "",
+      "item": "http://localhost:1313/categories/article/nvidia_driver_temp/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "",
+  "name": "",
+  "description": "计算环境部署文档\nUbuntu 基础环境准备 系统优化 锁内核：\napt-mark hold linux-generic linux-image-generic linux-headers-generic\n关闭自动更新：\nsudo sed -i.bak 's/1/0/' /etc/apt/apt.conf.d/10periodic \u0026amp;\u0026gt; /dev/null\nsudo sed -i.bak 's/1/0/' /etc/apt/apt.conf.d/20auto-upgrades \u0026amp;\u0026gt; /dev/null\n依赖安装 apt install gcc make -y\n驱动下载 Nvidia drive 下载 官方链接：https://www.nvidia.cn/drivers/lookup/\n根据个人的版本需求进行下载，下载后会获得一个run包，直接上传到服务器即可\n{width=\u0026ldquo;1.8180555555555555in\u0026rdquo; height=\u0026ldquo;1.8972222222222221in\u0026rdquo;}\nCuda 下载（根据实际版本） 官方链接：https://developer.nvidia.com/cuda-downloads\n根据个人的版本需求进行下载，下载后会获得一个run包，直接上传到服务器即可\n{width=\u0026ldquo;5.763888888888889in\u0026rdquo; height=\u0026ldquo;3.448611111111111in\u0026rdquo;}\nNvidia fabricmanager 下载（根据实际操作系统修改/SXM需要，PCIE不需要） wget https://developer.download.nvidia.cn/compute/cuda/repos/ubuntu2004/x86_64/nvidia-fabricmanager-535_535.154.05-1_amd64.deb\n驱动安装 Nvidia Drvie(根据实际版本修改) ./NVIDIA-Linux-x86_64-535.154.05.run \\\n--ui=none \\ # 禁用图形界面（纯命令行模式）\n--no-questions \\ # 跳过所有交互式提问（自动确认）\n--accept-license \\ # 自动接受许可协议\n--disable-nouveau \\ # 禁用开源驱动 Nouveau\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "计算环境部署文档\nUbuntu 基础环境准备 系统优化 锁内核：\napt-mark hold linux-generic linux-image-generic linux-headers-generic\n关闭自动更新：\nsudo sed -i.bak 's/1/0/' /etc/apt/apt.conf.d/10periodic \u0026\u003e /dev/null\nsudo sed -i.bak 's/1/0/' /etc/apt/apt.conf.d/20auto-upgrades \u0026\u003e /dev/null\n依赖安装 apt install gcc make -y\n驱动下载 Nvidia drive 下载 官方链接：https://www.nvidia.cn/drivers/lookup/\n根据个人的版本需求进行下载，下载后会获得一个run包，直接上传到服务器即可\n{width=“1.8180555555555555in” height=“1.8972222222222221in”}\nCuda 下载（根据实际版本） 官方链接：https://developer.nvidia.com/cuda-downloads\n根据个人的版本需求进行下载，下载后会获得一个run包，直接上传到服务器即可\n{width=“5.763888888888889in” height=“3.448611111111111in”}\nNvidia fabricmanager 下载（根据实际操作系统修改/SXM需要，PCIE不需要） wget https://developer.download.nvidia.cn/compute/cuda/repos/ubuntu2004/x86_64/nvidia-fabricmanager-535_535.154.05-1_amd64.deb\n驱动安装 Nvidia Drvie(根据实际版本修改) ./NVIDIA-Linux-x86_64-535.154.05.run \\\n--ui=none \\ # 禁用图形界面（纯命令行模式）\n--no-questions \\ # 跳过所有交互式提问（自动确认）\n--accept-license \\ # 自动接受许可协议\n--disable-nouveau \\ # 禁用开源驱动 Nouveau\n--install-libglvnd # 安装 libglvnd 兼容层\nCuda(根据实际版本修改) ./cuda_12.2.0_535.154.05_linux.ru \\\n--silent \\ # 静默模式\n--toolkit \\ # 仅安装CUDA Toolkit\n--override \\ # 覆盖某些默认设置\n--no-drm \\ # 安装DRM库，这样可以避免安装GPU驱动程序\n--no-opengl-libs # 不安装OpenGL库\nNvidia fabricmanager dpkg -i nvidia-fabricmanager-535_535.154.05-1_amd64.deb\n服务设置 Nvidia fabricmanager(NVLINK) systemctl daemon-reload\nsystemctl start nvidia-fabricmanager\nsystemctl enable nvidia-fabricmanager\nNvidia-persistenced cat \u003c\u003c EOF \u003e /lib/systemd/system/nvidia-persistenced.service\n[Unit]\nDescription=NVIDIA Persistence Daemon\nAfter=syslog.target\n[Service]\nType=forking\nPIDFile=/var/run/nvidia-persistenced/nvidia-persistenced.pid\nRestart=always\nExecStart=/usr/bin/nvidia-persistenced --verbose\nExecStopPost=/bin/rm -rf /var/run/nvidia-persistenced/*\nTimeoutSec=300\n[Install]\nWantedBy=multi-user.target\nEOF\nsystemctl daemon-reload\nsystemctl enable nvidia-persistenced\nsystemctl start nvidia-persistenced\nCuda 环境设置(根据实际情况) cat \u003c\u003c EOF \u003e\u003e /etc/profile\nexport PATH=/usr/local/cuda/bin:$PATH\nexport CUDA_HOME=/usr/local/cuda/\nexport LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH\nexport LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib:$LD_LIBRARY_PATH\nexport LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib/stubs:$LD_LIBRARY_PATH\nEOF\n环境加载\nsource /etc/profile\n环境验证 nvidia-smi +---------------------------------------------------------------------------------------+\n| NVIDIA-SMI 535.154.05 Driver Version: 535.154.05 CUDA Version: 12.2 |\n|-----------------------------------------+----------------------+----------------------+\n| GPU Name Persistence-M | Bus-Id Disp.A | Volatile Uncorr. ECC |\n| Fan Temp Perf Pwr:Usage/Cap | Memory-Usage | GPU-Util Compute M. |\n| | | MIG M. |\n|=========================================+======================+======================|\n| 0 NVIDIA A800-SXM4-80GB On | 00000000:10:00.0 Off | 0 |\n| N/A 41C P0 62W / 400W | 0MiB / 81920MiB | 0% Default |\n| | | Disabled |\n+-----------------------------------------+----------------------+----------------------+\n| 1 NVIDIA A800-SXM4-80GB On | 00000000:16:00.0 Off | 0 |\n| N/A 39C P0 63W / 400W | 0MiB / 81920MiB | 0% Default |\n| | | Disabled |\n+-----------------------------------------+----------------------+----------------------+\n| 2 NVIDIA A800-SXM4-80GB On | 00000000:49:00.0 Off | 0 |\n| N/A 37C P0 59W / 400W | 0MiB / 81920MiB | 0% Default |\n| | | Disabled |\n+-----------------------------------------+----------------------+----------------------+\n| 3 NVIDIA A800-SXM4-80GB On | 00000000:4D:00.0 Off | 0 |\n| N/A 39C P0 61W / 400W | 0MiB / 81920MiB | 0% Default |\n| | | Disabled |\n+-----------------------------------------+----------------------+----------------------+\n| 4 NVIDIA A800-SXM4-80GB On | 00000000:C5:00.0 Off | 0 |\n| N/A 38C P0 64W / 400W | 0MiB / 81920MiB | 0% Default |\n| | | Disabled |\n+-----------------------------------------+----------------------+----------------------+\n| 5 NVIDIA A800-SXM4-80GB On | 00000000:CA:00.0 Off | 0 |\n| N/A 40C P0 63W / 400W | 0MiB / 81920MiB | 0% Default |\n| | | Disabled |\n+-----------------------------------------+----------------------+----------------------+\n| 6 NVIDIA A800-SXM4-80GB On | 00000000:E3:00.0 Off | 0 |\n| N/A 37C P0 64W / 400W | 0MiB / 81920MiB | 0% Default |\n| | | Disabled |\n+-----------------------------------------+----------------------+----------------------+\n| 7 NVIDIA A800-SXM4-80GB On | 00000000:E7:00.0 Off | 0 |\n| N/A 41C P0 63W / 400W | 0MiB / 81920MiB | 0% Default |\n| | | Disabled |\n+-----------------------------------------+----------------------+----------------------+\n+---------------------------------------------------------------------------------------+\n| Processes: |\n| GPU GI CI PID Type Process name GPU Memory |\n| ID ID Usage |\n|=======================================================================================|\n| No running processes found |\n+---------------------------------------------------------------------------------------+\nnv-fabricmanager ● nvidia-fabricmanager.service - NVIDIA fabric manager service\nLoaded: loaded (/lib/systemd/system/nvidia-fabricmanager.service; enabled; vendor preset: enabled)\nActive: active (running) since Mon 2023-05-07 08:33:50 CST; 3 months 20 days ago\nMain PID: 2979 (nv-fabricmanage)\nTasks: 18 (limit: 629145)\nMemory: 17.9M\nCPU: 19min 27.766s\nCGroup: /system.slice/nvidia-fabricmanager.service\n└─2979 /usr/bin/nv-fabricmanager -c /usr/share/nvidia/nvswitch/fabricmanager.cfg\nnvidia-persistenced ● nvidia-persistenced.service - NVIDIA Persistence Daemon\nLoaded: loaded (/lib/systemd/system/nvidia-persistenced.service; enabled; vendor preset: enabled)\nActive: active (running) since Fri 2023-05-07 15:13:59 CST; 3 months 16 days ago\nMain PID: 304182 (nvidia-persiste)\nTasks: 1 (limit: 629145)\nMemory: 360.0K\nCPU: 214ms\nCGroup: /system.slice/nvidia-persistenced.service\n└─304182 /usr/bin/nvidia-persistenced --verbose\n",
+  "wordCount" : "589",
+  "inLanguage": "en",
+  "datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Miao16"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://localhost:1313/categories/article/nvidia_driver_temp/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Miao16",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://localhost:1313/imag/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://localhost:1313/" accesskey="h" title="Miao16 (Alt + H)">Miao16</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/" title="主页">
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/categories/article/" title="文章">
+                    <span>文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/categories/everyday/preparing" title="日常">
+                    <span>日常</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://tools.eimoon.com/" title="工具">
+                    <span>工具</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/categories/about/about-me" title="关于我">
+                    <span>关于我</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      
+    </h1>
+    <div class="post-meta">3 min&nbsp;·&nbsp;589 words&nbsp;·&nbsp;Miao16
+
+</div>
+  </header> 
+  <div class="post-content"><p>计算环境部署文档</p>
+<h1 id="ubuntu">Ubuntu<a hidden class="anchor" aria-hidden="true" href="#ubuntu">#</a></h1>
+<h2 id="基础环境准备">基础环境准备<a hidden class="anchor" aria-hidden="true" href="#基础环境准备">#</a></h2>
+<h3 id="系统优化">系统优化<a hidden class="anchor" aria-hidden="true" href="#系统优化">#</a></h3>
+<p>锁内核：</p>
+<p>apt-mark hold linux-generic linux-image-generic linux-headers-generic</p>
+<p>关闭自动更新：</p>
+<p>sudo sed -i.bak 's/1/0/' /etc/apt/apt.conf.d/10periodic &amp;&gt; /dev/null</p>
+<p>sudo sed -i.bak 's/1/0/' /etc/apt/apt.conf.d/20auto-upgrades &amp;&gt;
+/dev/null</p>
+<h3 id="依赖安装">依赖安装<a hidden class="anchor" aria-hidden="true" href="#依赖安装">#</a></h3>
+<p>apt install gcc make -y</p>
+<h2 id="驱动下载">驱动下载<a hidden class="anchor" aria-hidden="true" href="#驱动下载">#</a></h2>
+<h3 id="nvidia-drive-下载">Nvidia drive 下载<a hidden class="anchor" aria-hidden="true" href="#nvidia-drive-下载">#</a></h3>
+<p>官方链接：<a href="https://www.nvidia.cn/drivers/lookup/">https://www.nvidia.cn/drivers/lookup/</a></p>
+<p>根据个人的版本需求进行下载，下载后会获得一个run包，直接上传到服务器即可</p>
+<p><img loading="lazy" src="/root/hugo/hugo_source/static/images/nvidia-driver/media/image1.png">{width=&ldquo;1.8180555555555555in&rdquo;
+height=&ldquo;1.8972222222222221in&rdquo;}</p>
+<h3 id="cuda-下载根据实际版本">Cuda 下载（根据实际版本）<a hidden class="anchor" aria-hidden="true" href="#cuda-下载根据实际版本">#</a></h3>
+<p>官方链接：<a href="https://developer.nvidia.com/cuda-downloads">https://developer.nvidia.com/cuda-downloads</a></p>
+<p>根据个人的版本需求进行下载，下载后会获得一个run包，直接上传到服务器即可</p>
+<p><img loading="lazy" src="/root/hugo/hugo_source/static/images/nvidia-driver/media/image2.png">{width=&ldquo;5.763888888888889in&rdquo;
+height=&ldquo;3.448611111111111in&rdquo;}</p>
+<h3 id="nvidia-fabricmanager-下载根据实际操作系统修改sxm需要pcie不需要">Nvidia fabricmanager 下载（根据实际操作系统修改/SXM需要，PCIE不需要）<a hidden class="anchor" aria-hidden="true" href="#nvidia-fabricmanager-下载根据实际操作系统修改sxm需要pcie不需要">#</a></h3>
+<blockquote>
+<p>wget
+<a href="https://developer.download.nvidia.cn/compute/cuda/repos/ubuntu2004/x86">https://developer.download.nvidia.cn/compute/cuda/repos/ubuntu2004/x86</a>_64/nvidia-fabricmanager-535_535.154.05-1_amd64.deb</p></blockquote>
+<h2 id="驱动安装">驱动安装<a hidden class="anchor" aria-hidden="true" href="#驱动安装">#</a></h2>
+<h3 id="nvidia-drvie根据实际版本修改">Nvidia Drvie(根据实际版本修改)<a hidden class="anchor" aria-hidden="true" href="#nvidia-drvie根据实际版本修改">#</a></h3>
+<p>./NVIDIA-Linux-x86_64-535.154.05.run \</p>
+<p>--ui=none \ # 禁用图形界面（纯命令行模式）</p>
+<p>--no-questions \ # 跳过所有交互式提问（自动确认）</p>
+<p>--accept-license \ # 自动接受许可协议</p>
+<p>--disable-nouveau \ # 禁用开源驱动 Nouveau</p>
+<p>--install-libglvnd # 安装 libglvnd 兼容层</p>
+<h3 id="cuda根据实际版本修改">Cuda(根据实际版本修改)<a hidden class="anchor" aria-hidden="true" href="#cuda根据实际版本修改">#</a></h3>
+<p>./cuda_12.2.0_535.154.05_linux.ru \</p>
+<p>--silent \ # 静默模式</p>
+<p>--toolkit \ # 仅安装CUDA Toolkit</p>
+<p>--override \ # 覆盖某些默认设置</p>
+<p>--no-drm \ # 安装DRM库，这样可以避免安装GPU驱动程序</p>
+<p>--no-opengl-libs # 不安装OpenGL库</p>
+<h3 id="nvidia-fabricmanager">Nvidia fabricmanager<a hidden class="anchor" aria-hidden="true" href="#nvidia-fabricmanager">#</a></h3>
+<p>dpkg -i nvidia-fabricmanager-535_535.154.05-1_amd64.deb</p>
+<h2 id="服务设置">服务设置<a hidden class="anchor" aria-hidden="true" href="#服务设置">#</a></h2>
+<h3 id="nvidia-fabricmanagernvlink">Nvidia fabricmanager(NVLINK)<a hidden class="anchor" aria-hidden="true" href="#nvidia-fabricmanagernvlink">#</a></h3>
+<p>systemctl daemon-reload<br>
+systemctl start nvidia-fabricmanager<br>
+systemctl enable nvidia-fabricmanager</p>
+<h3 id="nvidia-persistenced">N<strong>vidia-persistenced</strong><a hidden class="anchor" aria-hidden="true" href="#nvidia-persistenced">#</a></h3>
+<p>cat &lt;&lt; EOF &gt; /lib/systemd/system/nvidia-persistenced.service<br>
+[Unit]<br>
+Description=NVIDIA Persistence Daemon<br>
+After=syslog.target<br>
+<br>
+[Service]<br>
+Type=forking<br>
+PIDFile=/var/run/nvidia-persistenced/nvidia-persistenced.pid<br>
+Restart=always<br>
+ExecStart=/usr/bin/nvidia-persistenced --verbose<br>
+ExecStopPost=/bin/rm -rf /var/run/nvidia-persistenced/*<br>
+TimeoutSec=300<br>
+<br>
+[Install]<br>
+WantedBy=multi-user.target<br>
+EOF<br>
+<br>
+systemctl daemon-reload<br>
+systemctl enable nvidia-persistenced<br>
+systemctl start nvidia-persistenced</p>
+<h3 id="cuda-环境设置根据实际情况"><strong>Cuda 环境设置(根据实际情况)</strong><a hidden class="anchor" aria-hidden="true" href="#cuda-环境设置根据实际情况">#</a></h3>
+<p>cat &lt;&lt; EOF &gt;&gt; /etc/profile</p>
+<p>export PATH=/usr/local/cuda/bin:$PATH</p>
+<p>export CUDA_HOME=/usr/local/cuda/</p>
+<p>export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH</p>
+<p>export
+LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib:$LD_LIBRARY_PATH</p>
+<p>export
+LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib/stubs:$LD_LIBRARY_PATH</p>
+<p>EOF<br>
+<br>
+环境加载<br>
+source /etc/profile</p>
+<h2 id="环境验证">环境验证<a hidden class="anchor" aria-hidden="true" href="#环境验证">#</a></h2>
+<h3 id="nvidia-smi">nvidia-smi<a hidden class="anchor" aria-hidden="true" href="#nvidia-smi">#</a></h3>
+<p>+---------------------------------------------------------------------------------------+</p>
+<p>| NVIDIA-SMI 535.154.05 Driver Version: 535.154.05 CUDA Version: 12.2
+|</p>
+<p>|-----------------------------------------+----------------------+----------------------+</p>
+<p>| GPU Name Persistence-M | Bus-Id Disp.A | Volatile Uncorr. ECC |</p>
+<p>| Fan Temp Perf Pwr:Usage/Cap | Memory-Usage | GPU-Util Compute M. |</p>
+<p>| | | MIG M. |</p>
+<p>|=========================================+======================+======================|</p>
+<p>| 0 NVIDIA A800-SXM4-80GB On | 00000000:10:00.0 Off | 0 |</p>
+<p>| N/A 41C P0 62W / 400W | 0MiB / 81920MiB | 0% Default |</p>
+<p>| | | Disabled |</p>
+<p>+-----------------------------------------+----------------------+----------------------+</p>
+<p>| 1 NVIDIA A800-SXM4-80GB On | 00000000:16:00.0 Off | 0 |</p>
+<p>| N/A 39C P0 63W / 400W | 0MiB / 81920MiB | 0% Default |</p>
+<p>| | | Disabled |</p>
+<p>+-----------------------------------------+----------------------+----------------------+</p>
+<p>| 2 NVIDIA A800-SXM4-80GB On | 00000000:49:00.0 Off | 0 |</p>
+<p>| N/A 37C P0 59W / 400W | 0MiB / 81920MiB | 0% Default |</p>
+<p>| | | Disabled |</p>
+<p>+-----------------------------------------+----------------------+----------------------+</p>
+<p>| 3 NVIDIA A800-SXM4-80GB On | 00000000:4D:00.0 Off | 0 |</p>
+<p>| N/A 39C P0 61W / 400W | 0MiB / 81920MiB | 0% Default |</p>
+<p>| | | Disabled |</p>
+<p>+-----------------------------------------+----------------------+----------------------+</p>
+<p>| 4 NVIDIA A800-SXM4-80GB On | 00000000:C5:00.0 Off | 0 |</p>
+<p>| N/A 38C P0 64W / 400W | 0MiB / 81920MiB | 0% Default |</p>
+<p>| | | Disabled |</p>
+<p>+-----------------------------------------+----------------------+----------------------+</p>
+<p>| 5 NVIDIA A800-SXM4-80GB On | 00000000:CA:00.0 Off | 0 |</p>
+<p>| N/A 40C P0 63W / 400W | 0MiB / 81920MiB | 0% Default |</p>
+<p>| | | Disabled |</p>
+<p>+-----------------------------------------+----------------------+----------------------+</p>
+<p>| 6 NVIDIA A800-SXM4-80GB On | 00000000:E3:00.0 Off | 0 |</p>
+<p>| N/A 37C P0 64W / 400W | 0MiB / 81920MiB | 0% Default |</p>
+<p>| | | Disabled |</p>
+<p>+-----------------------------------------+----------------------+----------------------+</p>
+<p>| 7 NVIDIA A800-SXM4-80GB On | 00000000:E7:00.0 Off | 0 |</p>
+<p>| N/A 41C P0 63W / 400W | 0MiB / 81920MiB | 0% Default |</p>
+<p>| | | Disabled |</p>
+<p>+-----------------------------------------+----------------------+----------------------+</p>
+<p>+---------------------------------------------------------------------------------------+</p>
+<p>| Processes: |</p>
+<p>| GPU GI CI PID Type Process name GPU Memory |</p>
+<p>| ID ID Usage |</p>
+<p>|=======================================================================================|</p>
+<p>| No running processes found |</p>
+<p>+---------------------------------------------------------------------------------------+</p>
+<h3 id="nv-fabricmanager">nv-fabricmanager<a hidden class="anchor" aria-hidden="true" href="#nv-fabricmanager">#</a></h3>
+<p>● nvidia-fabricmanager.service - NVIDIA fabric manager service</p>
+<p>Loaded: loaded (/lib/systemd/system/nvidia-fabricmanager.service;
+enabled; vendor preset: enabled)</p>
+<p>Active: active (running) since Mon 2023-05-07 08:33:50 CST; 3 months 20
+days ago</p>
+<p>Main PID: 2979 (nv-fabricmanage)</p>
+<p>Tasks: 18 (limit: 629145)</p>
+<p>Memory: 17.9M</p>
+<p>CPU: 19min 27.766s</p>
+<p>CGroup: /system.slice/nvidia-fabricmanager.service</p>
+<p>└─2979 /usr/bin/nv-fabricmanager -c
+/usr/share/nvidia/nvswitch/fabricmanager.cfg</p>
+<h3 id="nvidia-persistenced-1">nvidia-persistenced<a hidden class="anchor" aria-hidden="true" href="#nvidia-persistenced-1">#</a></h3>
+<p>● nvidia-persistenced.service - NVIDIA Persistence Daemon</p>
+<p>Loaded: loaded (/lib/systemd/system/nvidia-persistenced.service;
+enabled; vendor preset: enabled)</p>
+<p>Active: active (running) since Fri 2023-05-07 15:13:59 CST; 3 months 16
+days ago</p>
+<p>Main PID: 304182 (nvidia-persiste)</p>
+<p>Tasks: 1 (limit: 629145)</p>
+<p>Memory: 360.0K</p>
+<p>CPU: 214ms</p>
+<p>CGroup: /system.slice/nvidia-persistenced.service</p>
+<p>└─304182 /usr/bin/nvidia-persistenced --verbose</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://localhost:1313/categories/article/no_gpu/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>系统下屏蔽GPU显卡</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="http://localhost:1313/">Miao16</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
