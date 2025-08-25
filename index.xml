@@ -29,26 +29,21 @@
       <link>https://www.itwp.cn/categories/about/about-me/</link>
       <pubDate>Thu, 31 Jul 2025 18:00:00 +0800</pubDate>
       <guid>https://www.itwp.cn/categories/about/about-me/</guid>
-      <description>&lt;h3 id=&#34;个人经历&#34;&gt;个人经历&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;linux工程师&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.lexun.ltd&#34;&gt;北京乐讯科技有限公司&lt;/a&gt; · 北京 (2021.6 - 至今)&lt;/li&gt;
-&lt;li&gt;万卡GPU集群搭建和运维(ROCE V2)&lt;/li&gt;
-&lt;li&gt;多个千卡GPU集群搭建和运维(Infiniband、ROCE V2)&lt;/li&gt;
-&lt;li&gt;AIGC集群并行优化和包管理(Infiniband、ROCE V2)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;博客目标&#34;&gt;博客目标&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;记录成长&lt;/strong&gt;：记录自己的技术学习历程&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;分享知识&lt;/strong&gt;：将实践经验分享给更多人&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;建立联系&lt;/strong&gt;：与志同道合的朋友交流学习&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;持续学习&lt;/strong&gt;：通过写作促进自己深入思考&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;联系方式&#34;&gt;联系方式&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;邮箱：miaopu980516@gmail.com&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;感谢你的阅读！希望我的分享能对你有所帮助。&lt;/p&gt;</description>
+      <description>&lt;h3 id=&#34;个人经历&#34;&gt;个人经历 &lt;a href=&#34;mailto:miaopu980516@gmail.com&#34; class=&#34;email-icon&#34; title=&#34;联系我&#34;&gt;&lt;svg width=&#34;24&#34; height=&#34;24&#34; viewBox=&#34;0 0 24 24&#34; fill=&#34;none&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z&#34; fill=&#34;currentColor&#34;/&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;div class=&#34;experience-item&#34;&gt;
+    &lt;div class=&#34;experience-header&#34;&gt;
+        &lt;div&gt;
+            &lt;h4 class=&#34;experience-title&#34;&gt;linux工程师&lt;/h4&gt;
+            &lt;p class=&#34;experience-company&#34;&gt;&lt;a href=&#34;https://www.lexun.ltd/&#34;&gt;北京乐讯科技有限公司&lt;/a&gt; · 北京&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;experience-duration&#34;&gt;2021.6 - 至今&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;ul class=&#34;experience-duties&#34;&gt;
+        &lt;li&gt;万卡GPU集群搭建和运维(ROCE V2)&lt;/li&gt;
+        &lt;li&gt;多个千卡GPU集群搭建和运维(Infiniband、ROCE V2)&lt;/li&gt;
+        &lt;li&gt;AIGC集群并行优化和包管理(Infiniband、ROCE V2)&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</description>
     </item>
     <item>
       <title>GDR模块无法构建问题</title>
@@ -84,6 +79,13 @@
       <pubDate>Thu, 24 Aug 2023 17:00:00 +0800</pubDate>
       <guid>https://www.itwp.cn/categories/article/ubuntu-nvidia/</guid>
       <description>在Ubuntu系统上部署NVIDIA驱动、CUDA和相关服务配置</description>
+    </item>
+    <item>
+      <title></title>
+      <link>https://www.itwp.cn/categories/article/nvidia-driver-ubuntu/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://www.itwp.cn/categories/article/nvidia-driver-ubuntu/</guid>
+      <description></description>
     </item>
   </channel>
 </rss>
