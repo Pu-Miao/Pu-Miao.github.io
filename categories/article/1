@@ -1,0 +1,40 @@
+<div class="experience-item">
+    <div class="experience-header">
+        <div class="experience-info">
+            <h4 class="experience-title">
+                Linux工程师
+                <a href="mailto:miaopu980516@gmail.com" 
+                   class="email-icon" 
+                   title="通过邮件联系我"
+                   aria-label="发送邮件给我">
+                    <svg width="16" 
+                         height="16" 
+                         viewBox="0 0 24 24" 
+                         fill="none" 
+                         xmlns="http://www.w3.org/2000/svg"
+                         aria-hidden="true">
+                        <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" 
+                              fill="currentColor"/>
+                    </svg>
+                </a>
+            </h4>
+            <p class="experience-company">
+                <a href="https://www.lexun.ltd/" 
+                   target="_blank" 
+                   rel="noopener noreferrer">
+                    北京乐讯科技有限公司
+                </a>
+                <span class="location-separator"> · </span>
+                <span class="experience-location">北京</span>
+            </p>
+        </div>
+        <time class="experience-duration" datetime="2021-06">
+            2021.6 - 至今
+        </time>
+    </div>
+    <ul class="experience-duties">
+        <li>万卡GPU集群搭建和运维（ROCE V2）</li>
+        <li>多个千卡GPU集群搭建和运维（Infiniband、ROCE V2）</li>
+        <li>AIGC集群并行优化和包管理（Infiniband、ROCE V2）</li>
+    </ul>
+</div>

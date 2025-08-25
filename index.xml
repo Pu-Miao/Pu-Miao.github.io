@@ -29,20 +29,52 @@
       <link>https://www.itwp.cn/categories/about/about-me/</link>
       <pubDate>Thu, 31 Jul 2025 18:00:00 +0800</pubDate>
       <guid>https://www.itwp.cn/categories/about/about-me/</guid>
-      <description>&lt;h3 id=&#34;个人经历&#34;&gt;个人经历 &lt;a href=&#34;mailto:miaopu980516@gmail.com&#34; class=&#34;email-icon&#34; title=&#34;联系我&#34;&gt;&lt;svg width=&#34;24&#34; height=&#34;24&#34; viewBox=&#34;0 0 24 24&#34; fill=&#34;none&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z&#34; fill=&#34;currentColor&#34;/&gt;&lt;/svg&gt;&lt;/a&gt;&lt;/h3&gt;
+      <description>&lt;h3 id=&#34;个人经历&#34;&gt;个人经历&lt;/h3&gt;
 &lt;div class=&#34;experience-item&#34;&gt;
-    &lt;div class=&#34;experience-header&#34;&gt;
-        &lt;div&gt;
-            &lt;h4 class=&#34;experience-title&#34;&gt;linux工程师&lt;/h4&gt;
-            &lt;p class=&#34;experience-company&#34;&gt;&lt;a href=&#34;https://www.lexun.ltd/&#34;&gt;北京乐讯科技有限公司&lt;/a&gt; · 北京&lt;/p&gt;
-        &lt;/div&gt;
-        &lt;div class=&#34;experience-duration&#34;&gt;2021.6 - 至今&lt;/div&gt;
+  &lt;div class=&#34;experience-header&#34;&gt;
+    &lt;div class=&#34;experience-info&#34;&gt;
+      &lt;h4 class=&#34;experience-title&#34;&gt;
+        Linux工程师
+        &lt;a
+          href=&#34;mailto:miaopu980516@gmail.com&#34;
+          class=&#34;email-icon&#34;
+          title=&#34;通过邮件联系我&#34;
+          aria-label=&#34;发送邮件给我&#34;
+        &gt;
+          &lt;svg
+            width=&#34;16&#34;
+            height=&#34;16&#34;
+            viewBox=&#34;0 0 24 24&#34;
+            fill=&#34;none&#34;
+            xmlns=&#34;http://www.w3.org/2000/svg&#34;
+            aria-hidden=&#34;true&#34;
+          &gt;
+            &lt;path
+              d=&#34;M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z&#34;
+              fill=&#34;currentColor&#34;
+            /&gt;
+          &lt;/svg&gt;
+        &lt;/a&gt;
+      &lt;/h4&gt;
+      &lt;p class=&#34;experience-company&#34;&gt;
+        &lt;a
+          href=&#34;https://www.lexun.ltd/&#34;
+          target=&#34;_blank&#34;
+          rel=&#34;noopener noreferrer&#34;
+        &gt;
+          北京乐讯科技有限公司
+        &lt;/a&gt;
+        &lt;span class=&#34;location-separator&#34;&gt; · &lt;/span&gt;
+        &lt;span class=&#34;experience-location&#34;&gt;北京&lt;/span&gt;
+      &lt;/p&gt;
     &lt;/div&gt;
-    &lt;ul class=&#34;experience-duties&#34;&gt;
-        &lt;li&gt;万卡GPU集群搭建和运维(ROCE V2)&lt;/li&gt;
-        &lt;li&gt;多个千卡GPU集群搭建和运维(Infiniband、ROCE V2)&lt;/li&gt;
-        &lt;li&gt;AIGC集群并行优化和包管理(Infiniband、ROCE V2)&lt;/li&gt;
-    &lt;/ul&gt;
+    &lt;time class=&#34;experience-duration&#34; datetime=&#34;2021-06&#34;&gt; 2021.6 - 至今 &lt;/time&gt;
+  &lt;/div&gt;
+  &lt;ul class=&#34;experience-duties&#34;&gt;
+    &lt;li&gt;万卡GPU集群搭建和运维（ROCE V2）&lt;/li&gt;
+    &lt;li&gt;多个千卡GPU集群搭建和运维（Infiniband、ROCE V2）&lt;/li&gt;
+    &lt;li&gt;AIGC集群并行优化和包管理（Infiniband、ROCE V2）&lt;/li&gt;
+  &lt;/ul&gt;
 &lt;/div&gt;</description>
     </item>
     <item>
