@@ -160,13 +160,10 @@
 使用wget下载安装包：
 1 wget https://developer.download.nvidia.com/compute/cudnn/9.10.1/local_installers/cudnn-local-repo-ubuntu2204-9.10.1_1.0-1_amd64.deb 2. 安装cuDNN包 1 dpkg -i cudnn-local-repo-ubuntu2204-9.10.1_1.0-1_amd64.deb 3. 添加密钥并安装 复制密钥文件：
 1 sudo cp /var/cudnn-local-repo-ubuntu2204-9.10.1/cudnn-*-keyring.gpg /usr/share/keyrings/ 更新包列表并安装：
-1 2 sudo apt-get update sudo apt-get -y install cudnn 验证安装 版本验证 使用以下命令检查cuDNN版本：
-1 cat /usr/include/x86_64-linux-gnu/cudnn_version.h | grep CUDNN_MAJOR -A 2 根据输出结果，系统中已经成功安装了cuDNN版本9.10.1。
-查看安装文件路径 使用dpkg命令查看安装的文件路径：
-1 dpkg -L &lt;version&gt; 功能测试 运行示例程序 进入cuDNN示例目录并编译测试：
+1 2 3 4 5 6 7 sudo apt-get update sudo apt-get -y install cudnn cd /var/cudnn-local-repo-ubuntu2204-9.10.1/ dpkg -i libcudnn9-samples_9.10.1.4-1_all.deb dpkg -i libcudnn9-cuda-12_9.10.1.4-1_amd64.deb dpkg -i libcudnn9-dev-cuda-12_9.10.1.4-1_amd64.deb dpkg -i libcudnn9-headers-cuda-12_9.10.1.4-1_amd64.deb 验证安装 版本验证 使用以下命令检查cuDNN版本：
 ...</p>
   </div>
-  <footer class="entry-footer"><span title='2025-08-24 12:00:00 +0800 CST'>2025年08月24日</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;89 words&nbsp;·&nbsp;Miao16</footer>
+  <footer class="entry-footer"><span title='2025-08-24 12:00:00 +0800 CST'>2025年08月24日</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;104 words&nbsp;·&nbsp;Miao16</footer>
   <a class="entry-link" aria-label="post link to Ubuntu安装CuDNN 9.10.1" href="https://www.itwp.cn/categories/article/cudnn01/"></a>
 </article>
 
