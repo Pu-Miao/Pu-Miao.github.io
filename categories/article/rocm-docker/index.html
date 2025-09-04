@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Docker调用ROCM | Miao16</title>
+<meta name="keywords" content="">
+<meta name="description" content="Docker环境下部署ROCM超算GPU平台">
+<meta name="author" content="Miao16">
+<link rel="canonical" href="https://www.itwp.cn/categories/article/rocm-docker/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://www.itwp.cn/imag/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://www.itwp.cn/imag/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="https://www.itwp.cn/imag/favicon.ico">
+<link rel="apple-touch-icon" href="https://www.itwp.cn/imag/favicon.ico">
+<link rel="mask-icon" href="https://www.itwp.cn/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://www.itwp.cn/categories/article/rocm-docker/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta name="baidu-site-verification" content="codeva-gOQzLrFGEh" /><meta name="msvalidate.01" content="C71489B8D8810085B33E1FACB88FA2C8" /><meta property="og:url" content="https://www.itwp.cn/categories/article/rocm-docker/">
+  <meta property="og:site_name" content="Miao16">
+  <meta property="og:title" content="Docker调用ROCM">
+  <meta property="og:description" content="Docker环境下部署ROCM超算GPU平台">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="categories">
+    <meta property="article:published_time" content="2022-03-05T17:00:00+08:00">
+    <meta property="article:modified_time" content="2022-03-05T17:00:00+08:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker调用ROCM">
+<meta name="twitter:description" content="Docker环境下部署ROCM超算GPU平台">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Categories",
+      "item": "https://www.itwp.cn/categories/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "article",
+      "item": "https://www.itwp.cn/categories/article/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Docker调用ROCM",
+      "item": "https://www.itwp.cn/categories/article/rocm-docker/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Docker调用ROCM",
+  "name": "Docker调用ROCM",
+  "description": "Docker环境下部署ROCM超算GPU平台",
+  "keywords": [
+    
+  ],
+  "articleBody": "物理机部署 rocm 超算GPU平台 https://download.pytorch.org/whl/torch_stable.html\nsource /opt/rocm/env.sh 或者 module load /root/dtkxxx\nenv.sh 内容如下\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 #!/bin/bash # get DTKROOT by env.sh location DTKROOT=\"$(cd \"$(dirname \"${BASH_SOURCE[0]}\")\" \u0026\u0026 pwd)/$(basename \"${BASH_SOURCE[0]}\")\" export DTKROOT=$(dirname $DTKROOT) export AMDGPU_TARGETS=\"gfx906\" export ROCM_PATH=$DTKROOT export HIP_PATH=${ROCM_PATH}/hip export PATH=$ROCM_PATH/bin:$ROCM_PATH/opencl/bin:$ROCM_PATH/llvm/bin:$ROCM_PATH/hip/bin:$PATH export LD_LIBRARY_PATH=${ROCM_PATH}/lib:${ROCM_PATH}/opencl/lib:${ROCM_PATH}/lib64:$LD_LIBRARY_PATH export LD_LIBRARY_PATH=${ROCM_PATH}/hip/lib:${ROCM_PATH}/llvm/lib:$LD_LIBRARY_PATH export C_INCLUDE_PATH=${ROCM_PATH}/include:${ROCM_PATH}/llvm/include${C_INCLUDE_PATH:+:${C_INCLUDE_PATH}} export CPLUS_INCLUDE_PATH=${ROCM_PATH}/include:${ROCM_PATH}/llvm/include${CPLUS_INCLUDE_PATH:+:${CPLUS_INCLUDE_PATH}} rocm-smi 查看GPU\ndocker 部署eth –gfx906 超算GPU平台 1 docker run -it --name testa1 --env-file ./env --device=/dev/dri --device=/dev/kfd jupyter:v1 /bin/bash 说明：\n--device 指定GPU驱动路径 --env-file 指定env文件，本文件内声明代理节点，用于代理上网 env文件内容如下:\n1 2 3 proxy=http://sugonhsq:HfJSZ*j*@10.10.101.4:3333 http_proxy=http://sugonhsq:HfJSZ*j*@10.10.101.4:3333 https_proxy=http://sugonhsq:HfJSZ*j*@10.10.101.4:3333 调用redmini：\n--benchmark 会模拟一个服务器，不把地址发送出去\n1 ./teamredminer -a ethash --benchmark -o stratum+ssl://156.226.17.84:6677 -u 0x9Eefd5CB1CD01574bac349a9a92b01064FEF543C -p x FAQ docker 中无法调用opencl 说明：\nopencl路径：/opt/rocm/opencl/bin/clinfo 设置变量 PATH=$PATH:/opt/rocm/opencl/bin/ [root@localhost ~]# rocm-smi 显示 “There are no card” 问题处理：\n1. 无法使用clinfo 查看opencl平台 解决办法：docker 镜像中创建一个文件路径如下\n1 2 mkdir -p /etc/OpenCL/vendors/ vim /etc/OpenCL/vendors/amdocl64.icd 文件内容：\n1 libamdocl64.so 2. 创建库文件后还是报错，需要声明变量 1 2 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/dtk/opencl/lib export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/rocm/opencl/lib 配置：\n1 permitRootLogin yes teamredminer - 声明一下opencl的路径\n3. “there are no card\"报错 更新内核后和驱动不适配，不能更新内核\n曙光方德系统查看显卡状态 差别 hy-smi 和 rocm-smi 的区别 hy-smi:\nhy-smi就是封装的rocm-smi 可以这样理解dtk就是把rocm封装了下，在dcu1-2号都能用 rocm-smi:\n不过rocm-smi 是直接调用的 rocm超算平台 本质上没什区别 sugon方德系统:\n内核版本 957 如下图\n",
+  "wordCount" : "172",
+  "inLanguage": "en",
+  "datePublished": "2022-03-05T17:00:00+08:00",
+  "dateModified": "2022-03-05T17:00:00+08:00",
+  "author":{
+    "@type": "Person",
+    "name": "Miao16"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.itwp.cn/categories/article/rocm-docker/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Miao16",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.itwp.cn/imag/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://www.itwp.cn/" accesskey="h" title="Miao16 (Alt + H)">Miao16</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://www.itwp.cn/" title="主页">
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/search/" title="搜索 (Alt &#43; /)" accesskey=/>
+                    <span>搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/categories/article/" title="文章">
+                    <span>文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/categories/everyday/preparing" title="日常">
+                    <span>日常</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://tools.eimoon.com/" title="工具">
+                    <span>工具</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/categories/about/about-me" title="关于我">
+                    <span>关于我</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Docker调用ROCM
+    </h1>
+    <div class="post-description">
+      Docker环境下部署ROCM超算GPU平台
+    </div>
+    <div class="post-meta"><span title='2022-03-05 17:00:00 +0800 CST'>2022年03月05日</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;172 words&nbsp;·&nbsp;Miao16
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="物理机部署-rocm-超算gpu平台">物理机部署 rocm 超算GPU平台<a hidden class="anchor" aria-hidden="true" href="#物理机部署-rocm-超算gpu平台">#</a></h2>
+<p><a href="https://download.pytorch.org/whl/torch_stable.html">https://download.pytorch.org/whl/torch_stable.html</a></p>
+<p>source /opt/rocm/env.sh 或者 module load /root/dtkxxx</p>
+<p>env.sh 内容如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-0-1"><a class="lnlinks" href="#hl-0-1"> 1</a>
+</span><span class="lnt" id="hl-0-2"><a class="lnlinks" href="#hl-0-2"> 2</a>
+</span><span class="lnt" id="hl-0-3"><a class="lnlinks" href="#hl-0-3"> 3</a>
+</span><span class="lnt" id="hl-0-4"><a class="lnlinks" href="#hl-0-4"> 4</a>
+</span><span class="lnt" id="hl-0-5"><a class="lnlinks" href="#hl-0-5"> 5</a>
+</span><span class="lnt" id="hl-0-6"><a class="lnlinks" href="#hl-0-6"> 6</a>
+</span><span class="lnt" id="hl-0-7"><a class="lnlinks" href="#hl-0-7"> 7</a>
+</span><span class="lnt" id="hl-0-8"><a class="lnlinks" href="#hl-0-8"> 8</a>
+</span><span class="lnt" id="hl-0-9"><a class="lnlinks" href="#hl-0-9"> 9</a>
+</span><span class="lnt" id="hl-0-10"><a class="lnlinks" href="#hl-0-10">10</a>
+</span><span class="lnt" id="hl-0-11"><a class="lnlinks" href="#hl-0-11">11</a>
+</span><span class="lnt" id="hl-0-12"><a class="lnlinks" href="#hl-0-12">12</a>
+</span><span class="lnt" id="hl-0-13"><a class="lnlinks" href="#hl-0-13">13</a>
+</span><span class="lnt" id="hl-0-14"><a class="lnlinks" href="#hl-0-14">14</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="c1"># get DTKROOT by env.sh location</span>
+</span></span><span class="line"><span class="cl"><span class="nv">DTKROOT</span><span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span><span class="nb">cd</span> <span class="s2">&#34;</span><span class="k">$(</span>dirname <span class="s2">&#34;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">[0]</span><span class="si">}</span><span class="s2">&#34;</span><span class="k">)</span><span class="s2">&#34;</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span><span class="k">)</span><span class="s2">/</span><span class="k">$(</span>basename <span class="s2">&#34;</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">[0]</span><span class="si">}</span><span class="s2">&#34;</span><span class="k">)</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">DTKROOT</span><span class="o">=</span><span class="k">$(</span>dirname <span class="nv">$DTKROOT</span><span class="k">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">AMDGPU_TARGETS</span><span class="o">=</span><span class="s2">&#34;gfx906&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">ROCM_PATH</span><span class="o">=</span><span class="nv">$DTKROOT</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">HIP_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">ROCM_PATH</span><span class="si">}</span>/hip
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$ROCM_PATH</span>/bin:<span class="nv">$ROCM_PATH</span>/opencl/bin:<span class="nv">$ROCM_PATH</span>/llvm/bin:<span class="nv">$ROCM_PATH</span>/hip/bin:<span class="nv">$PATH</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">ROCM_PATH</span><span class="si">}</span>/lib:<span class="si">${</span><span class="nv">ROCM_PATH</span><span class="si">}</span>/opencl/lib:<span class="si">${</span><span class="nv">ROCM_PATH</span><span class="si">}</span>/lib64:<span class="nv">$LD_LIBRARY_PATH</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">ROCM_PATH</span><span class="si">}</span>/hip/lib:<span class="si">${</span><span class="nv">ROCM_PATH</span><span class="si">}</span>/llvm/lib:<span class="nv">$LD_LIBRARY_PATH</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">C_INCLUDE_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">ROCM_PATH</span><span class="si">}</span>/include:<span class="si">${</span><span class="nv">ROCM_PATH</span><span class="si">}</span>/llvm/include<span class="si">${</span><span class="nv">C_INCLUDE_PATH</span><span class="p">:+:</span><span class="si">${</span><span class="nv">C_INCLUDE_PATH</span><span class="si">}}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">CPLUS_INCLUDE_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">ROCM_PATH</span><span class="si">}</span>/include:<span class="si">${</span><span class="nv">ROCM_PATH</span><span class="si">}</span>/llvm/include<span class="si">${</span><span class="nv">CPLUS_INCLUDE_PATH</span><span class="p">:+:</span><span class="si">${</span><span class="nv">CPLUS_INCLUDE_PATH</span><span class="si">}}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>rocm-smi 查看GPU</p>
+<h2 id="docker-部署eth-gfx906-超算gpu平台">docker 部署eth &ndash;gfx906 超算GPU平台<a hidden class="anchor" aria-hidden="true" href="#docker-部署eth-gfx906-超算gpu平台">#</a></h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-1-1"><a class="lnlinks" href="#hl-1-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run -it --name testa1 --env-file ./env --device<span class="o">=</span>/dev/dri --device<span class="o">=</span>/dev/kfd jupyter:v1 /bin/bash
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>说明：</p>
+<ul>
+<li><code>--device</code> 指定GPU驱动路径</li>
+<li><code>--env-file</code> 指定env文件，本文件内声明代理节点，用于代理上网</li>
+</ul>
+<p>env文件内容如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-2-1"><a class="lnlinks" href="#hl-2-1">1</a>
+</span><span class="lnt" id="hl-2-2"><a class="lnlinks" href="#hl-2-2">2</a>
+</span><span class="lnt" id="hl-2-3"><a class="lnlinks" href="#hl-2-3">3</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">proxy</span><span class="o">=</span>http://sugonhsq:HfJSZ*j*@10.10.101.4:3333
+</span></span><span class="line"><span class="cl"><span class="nv">http_proxy</span><span class="o">=</span>http://sugonhsq:HfJSZ*j*@10.10.101.4:3333
+</span></span><span class="line"><span class="cl"><span class="nv">https_proxy</span><span class="o">=</span>http://sugonhsq:HfJSZ*j*@10.10.101.4:3333
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>调用redmini：</p>
+<p><code>--benchmark</code> 会模拟一个服务器，不把地址发送出去</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-3-1"><a class="lnlinks" href="#hl-3-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./teamredminer -a ethash --benchmark -o stratum+ssl://156.226.17.84:6677 -u 0x9Eefd5CB1CD01574bac349a9a92b01064FEF543C -p x
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="faq">FAQ<a hidden class="anchor" aria-hidden="true" href="#faq">#</a></h2>
+<h3 id="docker-中无法调用opencl">docker 中无法调用opencl<a hidden class="anchor" aria-hidden="true" href="#docker-中无法调用opencl">#</a></h3>
+<p>说明：</p>
+<ol>
+<li>opencl路径：<code>/opt/rocm/opencl/bin/clinfo</code></li>
+<li>设置变量 <code>PATH=$PATH:/opt/rocm/opencl/bin/</code></li>
+<li><code>[root@localhost ~]# rocm-smi</code> 显示 &ldquo;There are no card&rdquo;</li>
+</ol>
+<p>问题处理：</p>
+<h4 id="1-无法使用clinfo-查看opencl平台">1. 无法使用clinfo 查看opencl平台<a hidden class="anchor" aria-hidden="true" href="#1-无法使用clinfo-查看opencl平台">#</a></h4>
+<p>解决办法：docker 镜像中创建一个文件路径如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-4-1"><a class="lnlinks" href="#hl-4-1">1</a>
+</span><span class="lnt" id="hl-4-2"><a class="lnlinks" href="#hl-4-2">2</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir -p /etc/OpenCL/vendors/
+</span></span><span class="line"><span class="cl">vim /etc/OpenCL/vendors/amdocl64.icd
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>文件内容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-5-1"><a class="lnlinks" href="#hl-5-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">libamdocl64.so
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="2-创建库文件后还是报错需要声明变量">2. 创建库文件后还是报错，需要声明变量<a hidden class="anchor" aria-hidden="true" href="#2-创建库文件后还是报错需要声明变量">#</a></h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-6-1"><a class="lnlinks" href="#hl-6-1">1</a>
+</span><span class="lnt" id="hl-6-2"><a class="lnlinks" href="#hl-6-2">2</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/opt/dtk/opencl/lib
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/opt/rocm/opencl/lib
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-7-1"><a class="lnlinks" href="#hl-7-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">permitRootLogin yes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>teamredminer - 声明一下opencl的路径</p>
+<h4 id="3-there-are-no-card报错">3. &ldquo;there are no card&quot;报错<a hidden class="anchor" aria-hidden="true" href="#3-there-are-no-card报错">#</a></h4>
+<p>更新内核后和驱动不适配，不能更新内核</p>
+<h2 id="曙光方德系统查看显卡状态">曙光方德系统查看显卡状态<a hidden class="anchor" aria-hidden="true" href="#曙光方德系统查看显卡状态">#</a></h2>
+<p><img alt="曙光方德系统显卡状态1" loading="lazy" src="/images/rocm-docker/image1.png"></p>
+<p><img alt="曙光方德系统显卡状态2" loading="lazy" src="/images/rocm-docker/image2.png"></p>
+<h2 id="差别">差别<a hidden class="anchor" aria-hidden="true" href="#差别">#</a></h2>
+<h3 id="hy-smi-和-rocm-smi-的区别">hy-smi 和 rocm-smi 的区别<a hidden class="anchor" aria-hidden="true" href="#hy-smi-和-rocm-smi-的区别">#</a></h3>
+<p><strong>hy-smi:</strong></p>
+<ul>
+<li>hy-smi就是封装的rocm-smi</li>
+<li>可以这样理解dtk就是把rocm封装了下，在dcu1-2号都能用</li>
+</ul>
+<p><strong>rocm-smi:</strong></p>
+<ul>
+<li>不过rocm-smi 是直接调用的 rocm超算平台</li>
+<li>本质上没什区别</li>
+</ul>
+<p><strong>sugon方德系统:</strong></p>
+<p>内核版本 957 如下图</p>
+<p><img alt="内核版本信息" loading="lazy" src="/images/rocm-docker/image3.png"></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://www.itwp.cn/categories/article/ubuntu-nvidia/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>Ubuntu NVIDIA驱动部署</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://www.itwp.cn/">Miao16</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

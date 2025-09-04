@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Ubuntu安装CuDNN 9.10.1 | Miao16</title>
+<meta name="keywords" content="">
+<meta name="description" content="在Ubuntu 22.04.3系统上安装CuDNN 9.10.1的完整指南">
+<meta name="author" content="Miao16">
+<link rel="canonical" href="https://www.itwp.cn/categories/article/cudnn01/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://www.itwp.cn/imag/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://www.itwp.cn/imag/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="https://www.itwp.cn/imag/favicon.ico">
+<link rel="apple-touch-icon" href="https://www.itwp.cn/imag/favicon.ico">
+<link rel="mask-icon" href="https://www.itwp.cn/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://www.itwp.cn/categories/article/cudnn01/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta name="baidu-site-verification" content="codeva-gOQzLrFGEh" /><meta name="msvalidate.01" content="C71489B8D8810085B33E1FACB88FA2C8" /><meta property="og:url" content="https://www.itwp.cn/categories/article/cudnn01/">
+  <meta property="og:site_name" content="Miao16">
+  <meta property="og:title" content="Ubuntu安装CuDNN 9.10.1">
+  <meta property="og:description" content="在Ubuntu 22.04.3系统上安装CuDNN 9.10.1的完整指南">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="categories">
+    <meta property="article:published_time" content="2025-08-24T12:00:00+08:00">
+    <meta property="article:modified_time" content="2025-08-24T12:00:00+08:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ubuntu安装CuDNN 9.10.1">
+<meta name="twitter:description" content="在Ubuntu 22.04.3系统上安装CuDNN 9.10.1的完整指南">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Categories",
+      "item": "https://www.itwp.cn/categories/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "article",
+      "item": "https://www.itwp.cn/categories/article/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Ubuntu安装CuDNN 9.10.1",
+      "item": "https://www.itwp.cn/categories/article/cudnn01/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Ubuntu安装CuDNN 9.10.1",
+  "name": "Ubuntu安装CuDNN 9.10.1",
+  "description": "在Ubuntu 22.04.3系统上安装CuDNN 9.10.1的完整指南",
+  "keywords": [
+    
+  ],
+  "articleBody": "系统环境 操作系统: Ubuntu 22.04.3 CUDA环境: 12.8 NVIDIA驱动: 570.124.06 cuDNN版本: 9.10.1 一. cuDNN安装步骤 1. 下载cuDNN 历史版本下载: https://developer.nvidia.com/cudnn-archive\n最新版本下载: https://developer.nvidia.com/rdp/cudnn-download\n使用wget下载安装包：\n1 wget https://developer.download.nvidia.com/compute/cudnn/9.10.1/local_installers/cudnn-local-repo-ubuntu2204-9.10.1_1.0-1_amd64.deb 2. 安装cuDNN包 1 dpkg -i cudnn-local-repo-ubuntu2204-9.10.1_1.0-1_amd64.deb 3. 添加密钥并安装 复制密钥文件：\n1 sudo cp /var/cudnn-local-repo-ubuntu2204-9.10.1/cudnn-*-keyring.gpg /usr/share/keyrings/ 更新包列表并安装：\n1 2 3 4 5 6 7 sudo apt-get update sudo apt-get -y install cudnn cd /var/cudnn-local-repo-ubuntu2204-9.10.1/ dpkg -i libcudnn9-samples_9.10.1.4-1_all.deb dpkg -i libcudnn9-cuda-12_9.10.1.4-1_amd64.deb dpkg -i libcudnn9-dev-cuda-12_9.10.1.4-1_amd64.deb dpkg -i libcudnn9-headers-cuda-12_9.10.1.4-1_amd64.deb 二. 环境验证 1. 版本验证 使用以下命令检查cuDNN版本：\n1 cat /usr/include/x86_64-linux-gnu/cudnn_version.h | grep CUDNN_MAJOR -A 2 根据输出结果，系统中已经成功安装了cuDNN版本9.10.1。\n2. 查看安装文件路径(如果找不到文件可参考此步骤) 使用dpkg命令查看安装的文件路径：\n1 dpkg -L 3. 运行示例程序 进入cuDNN示例目录并编译测试：\n1 2 3 cd /usr/src/cudnn_samples_v9/mnistCUDNN make clean \u0026\u0026 make ./mnistCUDNN FAQ: 如果在make编译过程中提示缺少FreeImage.h，请运行： 1 sudo apt-get install libfreeimage3 libfreeimage-dev ",
+  "wordCount" : "108",
+  "inLanguage": "en",
+  "datePublished": "2025-08-24T12:00:00+08:00",
+  "dateModified": "2025-08-24T12:00:00+08:00",
+  "author":{
+    "@type": "Person",
+    "name": "Miao16"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.itwp.cn/categories/article/cudnn01/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Miao16",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.itwp.cn/imag/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://www.itwp.cn/" accesskey="h" title="Miao16 (Alt + H)">Miao16</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://www.itwp.cn/" title="主页">
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/search/" title="搜索 (Alt &#43; /)" accesskey=/>
+                    <span>搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/categories/article/" title="文章">
+                    <span>文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/categories/everyday/preparing" title="日常">
+                    <span>日常</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://tools.eimoon.com/" title="工具">
+                    <span>工具</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/categories/about/about-me" title="关于我">
+                    <span>关于我</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Ubuntu安装CuDNN 9.10.1
+    </h1>
+    <div class="post-description">
+      在Ubuntu 22.04.3系统上安装CuDNN 9.10.1的完整指南
+    </div>
+    <div class="post-meta"><span title='2025-08-24 12:00:00 +0800 CST'>2025年08月24日</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;108 words&nbsp;·&nbsp;Miao16
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="系统环境">系统环境<a hidden class="anchor" aria-hidden="true" href="#系统环境">#</a></h2>
+<ul>
+<li>操作系统: Ubuntu 22.04.3</li>
+<li>CUDA环境: 12.8</li>
+<li>NVIDIA驱动: 570.124.06</li>
+<li>cuDNN版本: 9.10.1</li>
+</ul>
+<h2 id="一-cudnn安装步骤">一. cuDNN安装步骤<a hidden class="anchor" aria-hidden="true" href="#一-cudnn安装步骤">#</a></h2>
+<h3 id="1-下载cudnn">1. 下载cuDNN<a hidden class="anchor" aria-hidden="true" href="#1-下载cudnn">#</a></h3>
+<p>历史版本下载: <a href="https://developer.nvidia.com/cudnn-archive">https://developer.nvidia.com/cudnn-archive</a></p>
+<p>最新版本下载: <a href="https://developer.nvidia.com/rdp/cudnn-download">https://developer.nvidia.com/rdp/cudnn-download</a></p>
+<p>使用wget下载安装包：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-0-1"><a class="lnlinks" href="#hl-0-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wget https://developer.download.nvidia.com/compute/cudnn/9.10.1/local_installers/cudnn-local-repo-ubuntu2204-9.10.1_1.0-1_amd64.deb
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-安装cudnn包">2. 安装cuDNN包<a hidden class="anchor" aria-hidden="true" href="#2-安装cudnn包">#</a></h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-1-1"><a class="lnlinks" href="#hl-1-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dpkg -i cudnn-local-repo-ubuntu2204-9.10.1_1.0-1_amd64.deb
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-添加密钥并安装">3. 添加密钥并安装<a hidden class="anchor" aria-hidden="true" href="#3-添加密钥并安装">#</a></h3>
+<p>复制密钥文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-2-1"><a class="lnlinks" href="#hl-2-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo cp /var/cudnn-local-repo-ubuntu2204-9.10.1/cudnn-*-keyring.gpg /usr/share/keyrings/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>更新包列表并安装：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-3-1"><a class="lnlinks" href="#hl-3-1">1</a>
+</span><span class="lnt" id="hl-3-2"><a class="lnlinks" href="#hl-3-2">2</a>
+</span><span class="lnt" id="hl-3-3"><a class="lnlinks" href="#hl-3-3">3</a>
+</span><span class="lnt" id="hl-3-4"><a class="lnlinks" href="#hl-3-4">4</a>
+</span><span class="lnt" id="hl-3-5"><a class="lnlinks" href="#hl-3-5">5</a>
+</span><span class="lnt" id="hl-3-6"><a class="lnlinks" href="#hl-3-6">6</a>
+</span><span class="lnt" id="hl-3-7"><a class="lnlinks" href="#hl-3-7">7</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get update
+</span></span><span class="line"><span class="cl">sudo apt-get -y install cudnn
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /var/cudnn-local-repo-ubuntu2204-9.10.1/
+</span></span><span class="line"><span class="cl">dpkg -i libcudnn9-samples_9.10.1.4-1_all.deb 
+</span></span><span class="line"><span class="cl">dpkg -i libcudnn9-cuda-12_9.10.1.4-1_amd64.deb
+</span></span><span class="line"><span class="cl">dpkg -i libcudnn9-dev-cuda-12_9.10.1.4-1_amd64.deb
+</span></span><span class="line"><span class="cl">dpkg -i libcudnn9-headers-cuda-12_9.10.1.4-1_amd64.deb
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="二-环境验证">二. 环境验证<a hidden class="anchor" aria-hidden="true" href="#二-环境验证">#</a></h2>
+<h3 id="1-版本验证">1. 版本验证<a hidden class="anchor" aria-hidden="true" href="#1-版本验证">#</a></h3>
+<p>使用以下命令检查cuDNN版本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-4-1"><a class="lnlinks" href="#hl-4-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /usr/include/x86_64-linux-gnu/cudnn_version.h <span class="p">|</span> grep CUDNN_MAJOR -A <span class="m">2</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img alt="cuDNN版本验证" loading="lazy" src="/images/CuDNN01/image1.png"></p>
+<p>根据输出结果，系统中已经成功安装了cuDNN版本9.10.1。</p>
+<h3 id="2-查看安装文件路径如果找不到文件可参考此步骤">2. 查看安装文件路径(如果找不到文件可参考此步骤)<a hidden class="anchor" aria-hidden="true" href="#2-查看安装文件路径如果找不到文件可参考此步骤">#</a></h3>
+<p>使用dpkg命令查看安装的文件路径：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-5-1"><a class="lnlinks" href="#hl-5-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dpkg -L &lt;version&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img alt="cuDNN文件路径" loading="lazy" src="/images/CuDNN01/image2.png"></p>
+<h3 id="3-运行示例程序">3. 运行示例程序<a hidden class="anchor" aria-hidden="true" href="#3-运行示例程序">#</a></h3>
+<p>进入cuDNN示例目录并编译测试：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-6-1"><a class="lnlinks" href="#hl-6-1">1</a>
+</span><span class="lnt" id="hl-6-2"><a class="lnlinks" href="#hl-6-2">2</a>
+</span><span class="lnt" id="hl-6-3"><a class="lnlinks" href="#hl-6-3">3</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /usr/src/cudnn_samples_v9/mnistCUDNN
+</span></span><span class="line"><span class="cl">make clean <span class="o">&amp;&amp;</span> make
+</span></span><span class="line"><span class="cl">./mnistCUDNN
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img alt="cuDNN测试结果" loading="lazy" src="/images/CuDNN01/image3.png"></p>
+<h3 id="faq">FAQ:<a hidden class="anchor" aria-hidden="true" href="#faq">#</a></h3>
+<ol>
+<li>如果在make编译过程中提示缺少FreeImage.h，请运行：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-7-1"><a class="lnlinks" href="#hl-7-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get install libfreeimage3 libfreeimage-dev
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img alt="FreeImage安装" loading="lazy" src="/images/CuDNN01/image4.png"></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://www.itwp.cn/categories/everyday/preparing/">
+    <span class="title">Next »</span>
+    <br>
+    <span></span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://www.itwp.cn/">Miao16</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

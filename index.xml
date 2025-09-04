@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Miao16</title>
+    <link>https://www.itwp.cn/</link>
+    <description>Recent content on Miao16</description>
+    <generator>Hugo -- 0.148.2</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 24 Aug 2025 12:00:00 +0800</lastBuildDate>
+    <atom:link href="https://www.itwp.cn/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ubuntu安装CuDNN 9.10.1</title>
+      <link>https://www.itwp.cn/categories/article/cudnn01/</link>
+      <pubDate>Sun, 24 Aug 2025 12:00:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/article/cudnn01/</guid>
+      <description>在Ubuntu 22.04.3系统上安装CuDNN 9.10.1的完整指南</description>
+    </item>
+    <item>
+      <title></title>
+      <link>https://www.itwp.cn/categories/everyday/preparing/</link>
+      <pubDate>Wed, 06 Aug 2025 11:00:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/everyday/preparing/</guid>
+      <description>&lt;h3 id=&#34;-内容准备中&#34;&gt;🚧 内容准备中&lt;/h3&gt;
+&lt;p&gt;感谢您访问我的博客！
+日常分类的内容正在精心准备中&amp;hellip;&amp;hellip;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>https://www.itwp.cn/categories/about/about-me/</link>
+      <pubDate>Thu, 31 Jul 2025 18:00:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/about/about-me/</guid>
+      <description>&lt;h3 id=&#34;个人经历&#34;&gt;个人经历&lt;/h3&gt;
+&lt;div class=&#34;experience-item&#34;&gt;
+  &lt;div class=&#34;experience-header&#34;&gt;
+    &lt;div class=&#34;experience-info&#34;&gt;
+      &lt;h4 class=&#34;experience-title&#34;&gt;
+        Linux工程师
+        &lt;a
+          href=&#34;mailto:miaopu980516@gmail.com&#34;
+          class=&#34;email-icon&#34;
+          title=&#34;通过邮件联系我&#34;
+          aria-label=&#34;发送邮件给我&#34;
+        &gt;
+          &lt;svg
+            width=&#34;16&#34;
+            height=&#34;16&#34;
+            viewBox=&#34;0 0 24 24&#34;
+            fill=&#34;none&#34;
+            xmlns=&#34;http://www.w3.org/2000/svg&#34;
+            aria-hidden=&#34;true&#34;
+          &gt;
+            &lt;path
+              d=&#34;M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z&#34;
+              fill=&#34;currentColor&#34;
+            /&gt;
+          &lt;/svg&gt;
+        &lt;/a&gt;
+      &lt;/h4&gt;
+      &lt;p class=&#34;experience-company&#34;&gt;
+        &lt;a
+          href=&#34;https://www.lexun.ltd/&#34;
+          target=&#34;_blank&#34;
+          rel=&#34;noopener noreferrer&#34;
+        &gt;
+          北京乐讯科技有限公司
+        &lt;/a&gt;
+        &lt;span class=&#34;location-separator&#34;&gt; · &lt;/span&gt;
+        &lt;span class=&#34;experience-location&#34;&gt;北京&lt;/span&gt;
+      &lt;/p&gt;
+    &lt;/div&gt;
+    &lt;time class=&#34;experience-duration&#34; datetime=&#34;2021-06&#34;&gt; 2021.6 - 至今 &lt;/time&gt;
+  &lt;/div&gt;
+  &lt;ul class=&#34;experience-duties&#34;&gt;
+    &lt;li&gt;万卡GPU集群搭建和运维（ROCE V2）&lt;/li&gt;
+    &lt;li&gt;多个千卡GPU集群搭建和运维（Infiniband、ROCE V2）&lt;/li&gt;
+    &lt;li&gt;AIGC集群并行优化和包管理（Infiniband、ROCE V2）&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</description>
+    </item>
+    <item>
+      <title>[问题记录]GDR模块无法构建,重新编译nvidia-peermem</title>
+      <link>https://www.itwp.cn/categories/article/gdr01/</link>
+      <pubDate>Sat, 14 Jun 2025 11:46:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/article/gdr01/</guid>
+      <description>在openEuler 22.03 SP3系统中解决nvidia-peermem模块无法加载导致GDR功能不可用的问题</description>
+    </item>
+    <item>
+      <title>Windows Server网卡Bond配置指南</title>
+      <link>https://www.itwp.cn/categories/article/windows-bond/</link>
+      <pubDate>Mon, 02 Dec 2024 16:00:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/article/windows-bond/</guid>
+      <description>详细介绍如何在Windows Server中使用PowerShell创建网卡Bond（网络组），包括VLAN配置和故障排除</description>
+    </item>
+    <item>
+      <title>NVIDIA DCGM01</title>
+      <link>https://www.itwp.cn/categories/article/dcgm01/</link>
+      <pubDate>Wed, 05 Jun 2024 17:38:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/article/dcgm01/</guid>
+      <description>详细介绍NVIDIA数据中心GPU管理器(DCGM)的安装、配置和使用，包括GPU监控、健康检查、性能诊断等核心功能</description>
+    </item>
+    <item>
+      <title>系统下屏蔽GPU显卡</title>
+      <link>https://www.itwp.cn/categories/article/no_gpu/</link>
+      <pubDate>Mon, 20 Nov 2023 15:00:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/article/no_gpu/</guid>
+      <description>本文用于进行故障诊断如何临时屏蔽某张GPU显卡</description>
+    </item>
+    <item>
+      <title>Ubuntu NVIDIA驱动部署</title>
+      <link>https://www.itwp.cn/categories/article/ubuntu-nvidia/</link>
+      <pubDate>Thu, 24 Aug 2023 17:00:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/article/ubuntu-nvidia/</guid>
+      <description>在Ubuntu系统上部署NVIDIA驱动、CUDA和相关服务配置</description>
+    </item>
+    <item>
+      <title>Docker调用ROCM</title>
+      <link>https://www.itwp.cn/categories/article/rocm-docker/</link>
+      <pubDate>Sat, 05 Mar 2022 17:00:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/article/rocm-docker/</guid>
+      <description>Docker环境下部署ROCM超算GPU平台</description>
+    </item>
+  </channel>
+</rss>

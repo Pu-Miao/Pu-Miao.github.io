@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Ubuntu NVIDIA驱动部署 | Miao16</title>
+<meta name="keywords" content="">
+<meta name="description" content="在Ubuntu系统上部署NVIDIA驱动、CUDA和相关服务配置">
+<meta name="author" content="Miao16">
+<link rel="canonical" href="https://www.itwp.cn/categories/article/ubuntu-nvidia/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://www.itwp.cn/imag/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://www.itwp.cn/imag/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="https://www.itwp.cn/imag/favicon.ico">
+<link rel="apple-touch-icon" href="https://www.itwp.cn/imag/favicon.ico">
+<link rel="mask-icon" href="https://www.itwp.cn/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://www.itwp.cn/categories/article/ubuntu-nvidia/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta name="baidu-site-verification" content="codeva-gOQzLrFGEh" /><meta name="msvalidate.01" content="C71489B8D8810085B33E1FACB88FA2C8" /><meta property="og:url" content="https://www.itwp.cn/categories/article/ubuntu-nvidia/">
+  <meta property="og:site_name" content="Miao16">
+  <meta property="og:title" content="Ubuntu NVIDIA驱动部署">
+  <meta property="og:description" content="在Ubuntu系统上部署NVIDIA驱动、CUDA和相关服务配置">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="categories">
+    <meta property="article:published_time" content="2023-08-24T17:00:00+08:00">
+    <meta property="article:modified_time" content="2023-08-24T17:00:00+08:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ubuntu NVIDIA驱动部署">
+<meta name="twitter:description" content="在Ubuntu系统上部署NVIDIA驱动、CUDA和相关服务配置">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Categories",
+      "item": "https://www.itwp.cn/categories/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "article",
+      "item": "https://www.itwp.cn/categories/article/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "Ubuntu NVIDIA驱动部署",
+      "item": "https://www.itwp.cn/categories/article/ubuntu-nvidia/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Ubuntu NVIDIA驱动部署",
+  "name": "Ubuntu NVIDIA驱动部署",
+  "description": "在Ubuntu系统上部署NVIDIA驱动、CUDA和相关服务配置",
+  "keywords": [
+    
+  ],
+  "articleBody": "一. 基础环境准备 1. 系统优化 1. 锁定内核版本 防止系统自动升级导致驱动不兼容：\n1 apt-mark hold linux-generic linux-image-generic linux-headers-generic 2. 关闭自动更新 1 2 sudo sed -i.bak 's/1/0/' /etc/apt/apt.conf.d/10periodic \u0026\u003e /dev/null sudo sed -i.bak 's/1/0/' /etc/apt/apt.conf.d/20auto-upgrades \u0026\u003e /dev/null 2. 依赖安装 安装编译必需的工具：\n1 apt install gcc make -y 二. 驱动下载 1. NVIDIA Driver下载 访问NVIDIA官方驱动下载页面： 官方链接: https://www.nvidia.cn/drivers/lookup/\n根据您的GPU型号和操作系统版本选择合适的驱动版本。下载后会获得一个.run安装包，直接上传到服务器即可。\n2. CUDA下载 访问NVIDIA CUDA下载页面： 官方链接: https://developer.nvidia.com/cuda-downloads\n选择对应的操作系统、架构和版本，推荐下载.run格式的安装包，便于自定义安装选项。\n3. NVIDIA Fabric Manager下载 注：仅SXM接口的GPU需要，PCIe接口的GPU不需要此组件。\n1 wget https://developer.download.nvidia.cn/compute/cuda/repos/ubuntu2004/x86_64/nvidia-fabricmanager-535_535.154.05-1_amd64.deb 三. 驱动安装 1. NVIDIA Driver安装 使用以下命令安装NVIDIA驱动（根据实际版本号修改）：\n1 2 3 4 5 6 ./NVIDIA-Linux-x86_64-535.154.05.run \\ --ui=none \\ --no-questions \\ --accept-license \\ --disable-nouveau \\ --install-libglvnd 2. CUDA安装 安装CUDA Toolkit（根据实际版本号修改）：\n1 2 3 4 5 6 ./cuda_12.2.0_535.154.05_linux.run \\ --silent \\ --toolkit \\ --override \\ --no-drm \\ --no-opengl-libs 3. NVIDIA Fabric Manager安装 仅适用于SXM接口的GPU（如A800、A100）：\n1 dpkg -i nvidia-fabricmanager-535_535.154.05-1_amd64.deb 四. 服务配置 1. NVIDIA Fabric Manager服务 启用和配置Fabric Manager服务（用于NVLink连接）：\n1 2 3 systemctl daemon-reload systemctl start nvidia-fabricmanager systemctl enable nvidia-fabricmanager 2. NVIDIA Persistence Daemon 创建并启用NVIDIA持久化守护程序：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 cat \u003c\u003c EOF \u003e /lib/systemd/system/nvidia-persistenced.service [Unit] Description=NVIDIA Persistence Daemon After=syslog.target [Service] Type=forking PIDFile=/var/run/nvidia-persistenced/nvidia-persistenced.pid Restart=always ExecStart=/usr/bin/nvidia-persistenced --verbose ExecStopPost=/bin/rm -rf /var/run/nvidia-persistenced/* TimeoutSec=300 [Install] WantedBy=multi-user.target EOF systemctl daemon-reload systemctl enable nvidia-persistenced systemctl start nvidia-persistenced 五. 环境配置 1. CUDA环境设置 将CUDA路径添加到系统环境变量：\n1 2 3 4 5 6 7 cat \u003c\u003c EOF \u003e\u003e /etc/profile export PATH=/usr/local/cuda/bin:$PATH export CUDA_HOME=/usr/local/cuda/ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH export LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib:$LD_LIBRARY_PATH export LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib/stubs:$LD_LIBRARY_PATH EOF 加载环境变量：\n1 source /etc/profile 六. 环境验证 1. nvidia-smi验证 运行nvidia-smi命令验证驱动安装：\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 nvidia-smi +-----------------------------------------------------------------------------+ | NVIDIA-SMI 535.154.05 Driver Version: 535.154.05 CUDA Version: 12.2 | |-------------------------------+----------------------+----------------------+ | GPU Name Persistence-M| Bus-Id Disp.A | Volatile Uncorr. ECC | | Fan Temp Perf Pwr:Usage/Cap| Memory-Usage | GPU-Util Compute M. | | | | MIG M. | |===============================+======================+======================| | 0 NVIDIA A800-SXM4-80GB On | 00000000:10:00.0 Off | 0 | | N/A 41C P0 62W / 400W | 0MiB / 81920MiB | 0% Default | | | | Disabled | +-------------------------------+----------------------+----------------------+ | 1 NVIDIA A800-SXM4-80GB On | 00000000:16:00.0 Off | 0 | | N/A 39C P0 63W / 400W | 0MiB / 81920MiB | 0% Default | | | | Disabled | +-------------------------------+----------------------+----------------------+ ... 2. NVIDIA Fabric Manager 检查Fabric Manager服务状态：\n1 2 3 4 5 6 7 8 9 10 11 systemctl status nvidia-fabricmanager ● nvidia-fabricmanager.service - NVIDIA fabric manager service Loaded: loaded (/lib/systemd/system/nvidia-fabricmanager.service; enabled; vendor preset: enabled) Active: active (running) since Mon 2023-05-07 08:33:50 CST; 3 months 20 days ago Main PID: 2979 (nv-fabricmanage) Tasks: 18 (limit: 629145) Memory: 17.9M CPU: 19min 27.766s CGroup: /system.slice/nvidia-fabricmanager.service └─2979 /usr/bin/nv-fabricmanager -c /usr/share/nvidia/nvswitch/fabricmanager.cfg 3. NVIDIA Persistence Daemon验证 检查持久化守护程序状态：\n1 2 3 4 5 6 7 8 9 10 11 systemctl status nvidia-persistenced ● nvidia-persistenced.service - NVIDIA Persistence Daemon Loaded: loaded (/lib/systemd/system/nvidia-persistenced.service; enabled; vendor preset: enabled) Active: active (running) since Fri 2023-05-07 15:13:59 CST; 3 months 16 days ago Main PID: 304182 (nvidia-persiste) Tasks: 1 (limit: 629145) Memory: 360.0K CPU: 214ms CGroup: /system.slice/nvidia-persistenced.service └─304182 /usr/bin/nvidia-persistenced --verbose ",
+  "wordCount" : "482",
+  "inLanguage": "en",
+  "datePublished": "2023-08-24T17:00:00+08:00",
+  "dateModified": "2023-08-24T17:00:00+08:00",
+  "author":{
+    "@type": "Person",
+    "name": "Miao16"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.itwp.cn/categories/article/ubuntu-nvidia/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Miao16",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.itwp.cn/imag/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://www.itwp.cn/" accesskey="h" title="Miao16 (Alt + H)">Miao16</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://www.itwp.cn/" title="主页">
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/search/" title="搜索 (Alt &#43; /)" accesskey=/>
+                    <span>搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/categories/article/" title="文章">
+                    <span>文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/categories/everyday/preparing" title="日常">
+                    <span>日常</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://tools.eimoon.com/" title="工具">
+                    <span>工具</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.itwp.cn/categories/about/about-me" title="关于我">
+                    <span>关于我</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Ubuntu NVIDIA驱动部署
+    </h1>
+    <div class="post-description">
+      在Ubuntu系统上部署NVIDIA驱动、CUDA和相关服务配置
+    </div>
+    <div class="post-meta"><span title='2023-08-24 17:00:00 +0800 CST'>2023年08月24日</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;482 words&nbsp;·&nbsp;Miao16
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="一-基础环境准备">一. 基础环境准备<a hidden class="anchor" aria-hidden="true" href="#一-基础环境准备">#</a></h2>
+<h3 id="1-系统优化">1. 系统优化<a hidden class="anchor" aria-hidden="true" href="#1-系统优化">#</a></h3>
+<h4 id="1-锁定内核版本">1. 锁定内核版本<a hidden class="anchor" aria-hidden="true" href="#1-锁定内核版本">#</a></h4>
+<p>防止系统自动升级导致驱动不兼容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-0-1"><a class="lnlinks" href="#hl-0-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-mark hold linux-generic linux-image-generic linux-headers-generic
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="2-关闭自动更新">2. 关闭自动更新<a hidden class="anchor" aria-hidden="true" href="#2-关闭自动更新">#</a></h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-1-1"><a class="lnlinks" href="#hl-1-1">1</a>
+</span><span class="lnt" id="hl-1-2"><a class="lnlinks" href="#hl-1-2">2</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo sed -i.bak <span class="s1">&#39;s/1/0/&#39;</span> /etc/apt/apt.conf.d/10periodic <span class="p">&amp;</span>&gt; /dev/null
+</span></span><span class="line"><span class="cl">sudo sed -i.bak <span class="s1">&#39;s/1/0/&#39;</span> /etc/apt/apt.conf.d/20auto-upgrades <span class="p">&amp;</span>&gt; /dev/null
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-依赖安装">2. 依赖安装<a hidden class="anchor" aria-hidden="true" href="#2-依赖安装">#</a></h3>
+<p>安装编译必需的工具：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-2-1"><a class="lnlinks" href="#hl-2-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt install gcc make -y
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="二-驱动下载">二. 驱动下载<a hidden class="anchor" aria-hidden="true" href="#二-驱动下载">#</a></h2>
+<h3 id="1-nvidia-driver下载">1. NVIDIA Driver下载<a hidden class="anchor" aria-hidden="true" href="#1-nvidia-driver下载">#</a></h3>
+<p>访问NVIDIA官方驱动下载页面：
+官方链接: <a href="https://www.nvidia.cn/drivers/lookup/">https://www.nvidia.cn/drivers/lookup/</a></p>
+<p><img alt="NVIDIA驱动下载页面" loading="lazy" src="/images/ubuntu-nvidia/media/image1.png"></p>
+<p>根据您的GPU型号和操作系统版本选择合适的驱动版本。下载后会获得一个<code>.run</code>安装包，直接上传到服务器即可。</p>
+<h3 id="2-cuda下载">2. CUDA下载<a hidden class="anchor" aria-hidden="true" href="#2-cuda下载">#</a></h3>
+<p>访问NVIDIA CUDA下载页面：
+官方链接: <a href="https://developer.nvidia.com/cuda-downloads">https://developer.nvidia.com/cuda-downloads</a></p>
+<p><img alt="CUDA下载页面" loading="lazy" src="/images/ubuntu-nvidia/media/image2.png"></p>
+<p>选择对应的操作系统、架构和版本，推荐下载<code>.run</code>格式的安装包，便于自定义安装选项。</p>
+<h3 id="3-nvidia-fabric-manager下载">3. NVIDIA Fabric Manager下载<a hidden class="anchor" aria-hidden="true" href="#3-nvidia-fabric-manager下载">#</a></h3>
+<p>注：仅SXM接口的GPU需要，PCIe接口的GPU不需要此组件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-3-1"><a class="lnlinks" href="#hl-3-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wget https://developer.download.nvidia.cn/compute/cuda/repos/ubuntu2004/x86_64/nvidia-fabricmanager-535_535.154.05-1_amd64.deb
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="三-驱动安装">三. 驱动安装<a hidden class="anchor" aria-hidden="true" href="#三-驱动安装">#</a></h2>
+<h3 id="1-nvidia-driver安装">1. NVIDIA Driver安装<a hidden class="anchor" aria-hidden="true" href="#1-nvidia-driver安装">#</a></h3>
+<p>使用以下命令安装NVIDIA驱动（根据实际版本号修改）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-4-1"><a class="lnlinks" href="#hl-4-1">1</a>
+</span><span class="lnt" id="hl-4-2"><a class="lnlinks" href="#hl-4-2">2</a>
+</span><span class="lnt" id="hl-4-3"><a class="lnlinks" href="#hl-4-3">3</a>
+</span><span class="lnt" id="hl-4-4"><a class="lnlinks" href="#hl-4-4">4</a>
+</span><span class="lnt" id="hl-4-5"><a class="lnlinks" href="#hl-4-5">5</a>
+</span><span class="lnt" id="hl-4-6"><a class="lnlinks" href="#hl-4-6">6</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./NVIDIA-Linux-x86_64-535.154.05.run <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --ui<span class="o">=</span>none <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --no-questions <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --accept-license <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --disable-nouveau <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --install-libglvnd
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-cuda安装">2. CUDA安装<a hidden class="anchor" aria-hidden="true" href="#2-cuda安装">#</a></h3>
+<p>安装CUDA Toolkit（根据实际版本号修改）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-5-1"><a class="lnlinks" href="#hl-5-1">1</a>
+</span><span class="lnt" id="hl-5-2"><a class="lnlinks" href="#hl-5-2">2</a>
+</span><span class="lnt" id="hl-5-3"><a class="lnlinks" href="#hl-5-3">3</a>
+</span><span class="lnt" id="hl-5-4"><a class="lnlinks" href="#hl-5-4">4</a>
+</span><span class="lnt" id="hl-5-5"><a class="lnlinks" href="#hl-5-5">5</a>
+</span><span class="lnt" id="hl-5-6"><a class="lnlinks" href="#hl-5-6">6</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./cuda_12.2.0_535.154.05_linux.run <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --silent <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --toolkit <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --override <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --no-drm <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  --no-opengl-libs
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-nvidia-fabric-manager安装">3. NVIDIA Fabric Manager安装<a hidden class="anchor" aria-hidden="true" href="#3-nvidia-fabric-manager安装">#</a></h3>
+<p>仅适用于SXM接口的GPU（如A800、A100）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-6-1"><a class="lnlinks" href="#hl-6-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dpkg -i nvidia-fabricmanager-535_535.154.05-1_amd64.deb
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="四-服务配置">四. 服务配置<a hidden class="anchor" aria-hidden="true" href="#四-服务配置">#</a></h2>
+<h3 id="1-nvidia-fabric-manager服务">1. NVIDIA Fabric Manager服务<a hidden class="anchor" aria-hidden="true" href="#1-nvidia-fabric-manager服务">#</a></h3>
+<p>启用和配置Fabric Manager服务（用于NVLink连接）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-7-1"><a class="lnlinks" href="#hl-7-1">1</a>
+</span><span class="lnt" id="hl-7-2"><a class="lnlinks" href="#hl-7-2">2</a>
+</span><span class="lnt" id="hl-7-3"><a class="lnlinks" href="#hl-7-3">3</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">systemctl daemon-reload
+</span></span><span class="line"><span class="cl">systemctl start nvidia-fabricmanager
+</span></span><span class="line"><span class="cl">systemctl <span class="nb">enable</span> nvidia-fabricmanager
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-nvidia-persistence-daemon">2. NVIDIA Persistence Daemon<a hidden class="anchor" aria-hidden="true" href="#2-nvidia-persistence-daemon">#</a></h3>
+<p>创建并启用NVIDIA持久化守护程序：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-8-1"><a class="lnlinks" href="#hl-8-1"> 1</a>
+</span><span class="lnt" id="hl-8-2"><a class="lnlinks" href="#hl-8-2"> 2</a>
+</span><span class="lnt" id="hl-8-3"><a class="lnlinks" href="#hl-8-3"> 3</a>
+</span><span class="lnt" id="hl-8-4"><a class="lnlinks" href="#hl-8-4"> 4</a>
+</span><span class="lnt" id="hl-8-5"><a class="lnlinks" href="#hl-8-5"> 5</a>
+</span><span class="lnt" id="hl-8-6"><a class="lnlinks" href="#hl-8-6"> 6</a>
+</span><span class="lnt" id="hl-8-7"><a class="lnlinks" href="#hl-8-7"> 7</a>
+</span><span class="lnt" id="hl-8-8"><a class="lnlinks" href="#hl-8-8"> 8</a>
+</span><span class="lnt" id="hl-8-9"><a class="lnlinks" href="#hl-8-9"> 9</a>
+</span><span class="lnt" id="hl-8-10"><a class="lnlinks" href="#hl-8-10">10</a>
+</span><span class="lnt" id="hl-8-11"><a class="lnlinks" href="#hl-8-11">11</a>
+</span><span class="lnt" id="hl-8-12"><a class="lnlinks" href="#hl-8-12">12</a>
+</span><span class="lnt" id="hl-8-13"><a class="lnlinks" href="#hl-8-13">13</a>
+</span><span class="lnt" id="hl-8-14"><a class="lnlinks" href="#hl-8-14">14</a>
+</span><span class="lnt" id="hl-8-15"><a class="lnlinks" href="#hl-8-15">15</a>
+</span><span class="lnt" id="hl-8-16"><a class="lnlinks" href="#hl-8-16">16</a>
+</span><span class="lnt" id="hl-8-17"><a class="lnlinks" href="#hl-8-17">17</a>
+</span><span class="lnt" id="hl-8-18"><a class="lnlinks" href="#hl-8-18">18</a>
+</span><span class="lnt" id="hl-8-19"><a class="lnlinks" href="#hl-8-19">19</a>
+</span><span class="lnt" id="hl-8-20"><a class="lnlinks" href="#hl-8-20">20</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat <span class="s">&lt;&lt; EOF &gt; /lib/systemd/system/nvidia-persistenced.service
+</span></span></span><span class="line"><span class="cl"><span class="s">[Unit]
+</span></span></span><span class="line"><span class="cl"><span class="s">Description=NVIDIA Persistence Daemon
+</span></span></span><span class="line"><span class="cl"><span class="s">After=syslog.target
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">[Service]
+</span></span></span><span class="line"><span class="cl"><span class="s">Type=forking
+</span></span></span><span class="line"><span class="cl"><span class="s">PIDFile=/var/run/nvidia-persistenced/nvidia-persistenced.pid
+</span></span></span><span class="line"><span class="cl"><span class="s">Restart=always
+</span></span></span><span class="line"><span class="cl"><span class="s">ExecStart=/usr/bin/nvidia-persistenced --verbose
+</span></span></span><span class="line"><span class="cl"><span class="s">ExecStopPost=/bin/rm -rf /var/run/nvidia-persistenced/*
+</span></span></span><span class="line"><span class="cl"><span class="s">TimeoutSec=300
+</span></span></span><span class="line"><span class="cl"><span class="s">
+</span></span></span><span class="line"><span class="cl"><span class="s">[Install]
+</span></span></span><span class="line"><span class="cl"><span class="s">WantedBy=multi-user.target
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">systemctl daemon-reload
+</span></span><span class="line"><span class="cl">systemctl <span class="nb">enable</span> nvidia-persistenced
+</span></span><span class="line"><span class="cl">systemctl start nvidia-persistenced
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="五-环境配置">五. 环境配置<a hidden class="anchor" aria-hidden="true" href="#五-环境配置">#</a></h2>
+<h3 id="1-cuda环境设置">1. CUDA环境设置<a hidden class="anchor" aria-hidden="true" href="#1-cuda环境设置">#</a></h3>
+<p>将CUDA路径添加到系统环境变量：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-9-1"><a class="lnlinks" href="#hl-9-1">1</a>
+</span><span class="lnt" id="hl-9-2"><a class="lnlinks" href="#hl-9-2">2</a>
+</span><span class="lnt" id="hl-9-3"><a class="lnlinks" href="#hl-9-3">3</a>
+</span><span class="lnt" id="hl-9-4"><a class="lnlinks" href="#hl-9-4">4</a>
+</span><span class="lnt" id="hl-9-5"><a class="lnlinks" href="#hl-9-5">5</a>
+</span><span class="lnt" id="hl-9-6"><a class="lnlinks" href="#hl-9-6">6</a>
+</span><span class="lnt" id="hl-9-7"><a class="lnlinks" href="#hl-9-7">7</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat <span class="s">&lt;&lt; EOF &gt;&gt; /etc/profile
+</span></span></span><span class="line"><span class="cl"><span class="s">export PATH=/usr/local/cuda/bin:$PATH
+</span></span></span><span class="line"><span class="cl"><span class="s">export CUDA_HOME=/usr/local/cuda/
+</span></span></span><span class="line"><span class="cl"><span class="s">export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+</span></span></span><span class="line"><span class="cl"><span class="s">export LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib:$LD_LIBRARY_PATH
+</span></span></span><span class="line"><span class="cl"><span class="s">export LD_LIBRARY_PATH=/usr/local/cuda/targets/x86_64-linux/lib/stubs:$LD_LIBRARY_PATH
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>加载环境变量：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-10-1"><a class="lnlinks" href="#hl-10-1">1</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">source</span> /etc/profile
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="六-环境验证">六. 环境验证<a hidden class="anchor" aria-hidden="true" href="#六-环境验证">#</a></h2>
+<h3 id="1-nvidia-smi验证">1. nvidia-smi验证<a hidden class="anchor" aria-hidden="true" href="#1-nvidia-smi验证">#</a></h3>
+<p>运行<code>nvidia-smi</code>命令验证驱动安装：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-11-1"><a class="lnlinks" href="#hl-11-1"> 1</a>
+</span><span class="lnt" id="hl-11-2"><a class="lnlinks" href="#hl-11-2"> 2</a>
+</span><span class="lnt" id="hl-11-3"><a class="lnlinks" href="#hl-11-3"> 3</a>
+</span><span class="lnt" id="hl-11-4"><a class="lnlinks" href="#hl-11-4"> 4</a>
+</span><span class="lnt" id="hl-11-5"><a class="lnlinks" href="#hl-11-5"> 5</a>
+</span><span class="lnt" id="hl-11-6"><a class="lnlinks" href="#hl-11-6"> 6</a>
+</span><span class="lnt" id="hl-11-7"><a class="lnlinks" href="#hl-11-7"> 7</a>
+</span><span class="lnt" id="hl-11-8"><a class="lnlinks" href="#hl-11-8"> 8</a>
+</span><span class="lnt" id="hl-11-9"><a class="lnlinks" href="#hl-11-9"> 9</a>
+</span><span class="lnt" id="hl-11-10"><a class="lnlinks" href="#hl-11-10">10</a>
+</span><span class="lnt" id="hl-11-11"><a class="lnlinks" href="#hl-11-11">11</a>
+</span><span class="lnt" id="hl-11-12"><a class="lnlinks" href="#hl-11-12">12</a>
+</span><span class="lnt" id="hl-11-13"><a class="lnlinks" href="#hl-11-13">13</a>
+</span><span class="lnt" id="hl-11-14"><a class="lnlinks" href="#hl-11-14">14</a>
+</span><span class="lnt" id="hl-11-15"><a class="lnlinks" href="#hl-11-15">15</a>
+</span><span class="lnt" id="hl-11-16"><a class="lnlinks" href="#hl-11-16">16</a>
+</span><span class="lnt" id="hl-11-17"><a class="lnlinks" href="#hl-11-17">17</a>
+</span><span class="lnt" id="hl-11-18"><a class="lnlinks" href="#hl-11-18">18</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nvidia-smi
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">+-----------------------------------------------------------------------------+
+</span></span><span class="line"><span class="cl"><span class="p">|</span> NVIDIA-SMI 535.154.05     Driver Version: 535.154.05     CUDA Version: 12.2 <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>-------------------------------+----------------------+----------------------+
+</span></span><span class="line"><span class="cl"><span class="p">|</span> GPU  Name        Persistence-M<span class="p">|</span> Bus-Id        Disp.A <span class="p">|</span> Volatile Uncorr. ECC <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> Fan  Temp  Perf  Pwr:Usage/Cap<span class="p">|</span>         Memory-Usage <span class="p">|</span> GPU-Util  Compute M. <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>                               <span class="p">|</span>                      <span class="p">|</span>               MIG M. <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span><span class="o">===============================</span>+<span class="o">======================</span>+<span class="o">======================</span><span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   <span class="m">0</span>  NVIDIA A800-SXM4-80GB  On   <span class="p">|</span> 00000000:10:00.0 Off <span class="p">|</span>                    <span class="m">0</span> <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> N/A   41C    P0    62W / 400W <span class="p">|</span>      0MiB / 81920MiB <span class="p">|</span>      0%      Default <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>                               <span class="p">|</span>                      <span class="p">|</span>             Disabled <span class="p">|</span>
+</span></span><span class="line"><span class="cl">+-------------------------------+----------------------+----------------------+
+</span></span><span class="line"><span class="cl"><span class="p">|</span>   <span class="m">1</span>  NVIDIA A800-SXM4-80GB  On   <span class="p">|</span> 00000000:16:00.0 Off <span class="p">|</span>                    <span class="m">0</span> <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span> N/A   39C    P0    63W / 400W <span class="p">|</span>      0MiB / 81920MiB <span class="p">|</span>      0%      Default <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="p">|</span>                               <span class="p">|</span>                      <span class="p">|</span>             Disabled <span class="p">|</span>
+</span></span><span class="line"><span class="cl">+-------------------------------+----------------------+----------------------+
+</span></span><span class="line"><span class="cl">...
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="2-nvidia-fabric-manager">2. NVIDIA Fabric Manager<a hidden class="anchor" aria-hidden="true" href="#2-nvidia-fabric-manager">#</a></h3>
+<p>检查Fabric Manager服务状态：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-12-1"><a class="lnlinks" href="#hl-12-1"> 1</a>
+</span><span class="lnt" id="hl-12-2"><a class="lnlinks" href="#hl-12-2"> 2</a>
+</span><span class="lnt" id="hl-12-3"><a class="lnlinks" href="#hl-12-3"> 3</a>
+</span><span class="lnt" id="hl-12-4"><a class="lnlinks" href="#hl-12-4"> 4</a>
+</span><span class="lnt" id="hl-12-5"><a class="lnlinks" href="#hl-12-5"> 5</a>
+</span><span class="lnt" id="hl-12-6"><a class="lnlinks" href="#hl-12-6"> 6</a>
+</span><span class="lnt" id="hl-12-7"><a class="lnlinks" href="#hl-12-7"> 7</a>
+</span><span class="lnt" id="hl-12-8"><a class="lnlinks" href="#hl-12-8"> 8</a>
+</span><span class="lnt" id="hl-12-9"><a class="lnlinks" href="#hl-12-9"> 9</a>
+</span><span class="lnt" id="hl-12-10"><a class="lnlinks" href="#hl-12-10">10</a>
+</span><span class="lnt" id="hl-12-11"><a class="lnlinks" href="#hl-12-11">11</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">systemctl status nvidia-fabricmanager
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">● nvidia-fabricmanager.service - NVIDIA fabric manager service
+</span></span><span class="line"><span class="cl">   Loaded: loaded <span class="o">(</span>/lib/systemd/system/nvidia-fabricmanager.service<span class="p">;</span> enabled<span class="p">;</span> vendor preset: enabled<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   Active: active <span class="o">(</span>running<span class="o">)</span> since Mon 2023-05-07 08:33:50 CST<span class="p">;</span> <span class="m">3</span> months <span class="m">20</span> days ago
+</span></span><span class="line"><span class="cl">   Main PID: <span class="m">2979</span> <span class="o">(</span>nv-fabricmanage<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   Tasks: <span class="m">18</span> <span class="o">(</span>limit: 629145<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   Memory: 17.9M
+</span></span><span class="line"><span class="cl">   CPU: 19min 27.766s
+</span></span><span class="line"><span class="cl">   CGroup: /system.slice/nvidia-fabricmanager.service
+</span></span><span class="line"><span class="cl">           └─2979 /usr/bin/nv-fabricmanager -c /usr/share/nvidia/nvswitch/fabricmanager.cfg
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="3-nvidia-persistence-daemon验证">3. NVIDIA Persistence Daemon验证<a hidden class="anchor" aria-hidden="true" href="#3-nvidia-persistence-daemon验证">#</a></h3>
+<p>检查持久化守护程序状态：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt" id="hl-13-1"><a class="lnlinks" href="#hl-13-1"> 1</a>
+</span><span class="lnt" id="hl-13-2"><a class="lnlinks" href="#hl-13-2"> 2</a>
+</span><span class="lnt" id="hl-13-3"><a class="lnlinks" href="#hl-13-3"> 3</a>
+</span><span class="lnt" id="hl-13-4"><a class="lnlinks" href="#hl-13-4"> 4</a>
+</span><span class="lnt" id="hl-13-5"><a class="lnlinks" href="#hl-13-5"> 5</a>
+</span><span class="lnt" id="hl-13-6"><a class="lnlinks" href="#hl-13-6"> 6</a>
+</span><span class="lnt" id="hl-13-7"><a class="lnlinks" href="#hl-13-7"> 7</a>
+</span><span class="lnt" id="hl-13-8"><a class="lnlinks" href="#hl-13-8"> 8</a>
+</span><span class="lnt" id="hl-13-9"><a class="lnlinks" href="#hl-13-9"> 9</a>
+</span><span class="lnt" id="hl-13-10"><a class="lnlinks" href="#hl-13-10">10</a>
+</span><span class="lnt" id="hl-13-11"><a class="lnlinks" href="#hl-13-11">11</a>
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">systemctl status nvidia-persistenced
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">● nvidia-persistenced.service - NVIDIA Persistence Daemon
+</span></span><span class="line"><span class="cl">   Loaded: loaded <span class="o">(</span>/lib/systemd/system/nvidia-persistenced.service<span class="p">;</span> enabled<span class="p">;</span> vendor preset: enabled<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   Active: active <span class="o">(</span>running<span class="o">)</span> since Fri 2023-05-07 15:13:59 CST<span class="p">;</span> <span class="m">3</span> months <span class="m">16</span> days ago
+</span></span><span class="line"><span class="cl">   Main PID: <span class="m">304182</span> <span class="o">(</span>nvidia-persiste<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   Tasks: <span class="m">1</span> <span class="o">(</span>limit: 629145<span class="o">)</span>
+</span></span><span class="line"><span class="cl">   Memory: 360.0K
+</span></span><span class="line"><span class="cl">   CPU: 214ms
+</span></span><span class="line"><span class="cl">   CGroup: /system.slice/nvidia-persistenced.service
+</span></span><span class="line"><span class="cl">           └─304182 /usr/bin/nvidia-persistenced --verbose
+</span></span></code></pre></td></tr></table>
+</div>
+</div>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://www.itwp.cn/categories/article/no_gpu/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>系统下屏蔽GPU显卡</span>
+  </a>
+  <a class="next" href="https://www.itwp.cn/categories/article/rocm-docker/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Docker调用ROCM</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://www.itwp.cn/">Miao16</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
