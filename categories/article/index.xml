@@ -37,6 +37,13 @@
       <description>详细介绍NVIDIA数据中心GPU管理器(DCGM)的安装、配置和使用，包括GPU监控、健康检查、性能诊断等核心功能</description>
     </item>
     <item>
+      <title>Mellanox网卡常用命令详解</title>
+      <link>https://www.itwp.cn/categories/article/mellanox_cmd01/</link>
+      <pubDate>Wed, 07 Feb 2024 10:00:00 +0800</pubDate>
+      <guid>https://www.itwp.cn/categories/article/mellanox_cmd01/</guid>
+      <description>详细介绍Mellanox网卡的常用诊断、管理和测试命令，包括网络拓扑查看、性能测试、故障排查等</description>
+    </item>
+    <item>
       <title>系统下屏蔽GPU显卡</title>
       <link>https://www.itwp.cn/categories/article/no_gpu/</link>
       <pubDate>Mon, 20 Nov 2023 15:00:00 +0800</pubDate>

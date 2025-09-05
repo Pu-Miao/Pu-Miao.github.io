@@ -230,6 +230,31 @@ x86架构：
 
 <article class="post-entry"> 
   <header class="entry-header">
+    <h2>Mellanox网卡常用命令详解
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>1. lspci - 检查本地PCI设备 检查本地的PCI设备，用于识别Mellanox网卡。
+示例： lspci | grep -i mell
+2. ofed_info - 检测OFED驱动版本 检测OFED驱动版本信息。
+示例： ofed_info -s
+3. ibstat - 查看IB网卡状态 查看本机的InfiniBand网卡状态。
+4. mst - Mellanox软件管理工具 Mellanox软件管理工具，用来生成IB设备描述符，提供给其他命令使用。
+示例： mst start
+5. mlnx_perf - 查看端口收发流量 可以查看端口的收发流量。
+参数说明：
+-i：选项接IB设备名称，如ib0, ib1… -t：每隔多久采集一次，单位秒 -c：采集多少次 6. ibswitches - 获取子网交换机信息 获取当前子网的所有交换机的信息。显示子网内所有识别到的交换机的GUID、端口数量、交换机名字、LID号等。
+7. ibhosts - 获取子网HCA信息 获取当前子网的所有HCA的信息。显示子网内所有识别到的HCA的GUID、端口数量、交换机名字、LID号等。
+8. ibnodes - 获取子网所有设备信息 获取当前子网的所有交换机和HCA的信息。显示子网内所有识别到的交换机和HCA的GUID、端口数量、交换机名字、LID号等。相当于ibhosts和ibswitches命令的合并。
+9. ibnetdiscover - 扫描IB网络设备 扫描当前网络中的IB设备。输出内容包括GUID、端口号、LID号和节点描述以及交换机和HCA卡的连接关系。
+...</p>
+  </div>
+  <footer class="entry-footer"><span title='2024-02-07 10:00:00 +0800 CST'>2024年02月07日</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;228 words&nbsp;·&nbsp;Miao16</footer>
+  <a class="entry-link" aria-label="post link to Mellanox网卡常用命令详解" href="https://www.itwp.cn/categories/article/mellanox_cmd01/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
     <h2>系统下屏蔽GPU显卡
     </h2>
   </header>
