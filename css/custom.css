@@ -1,0 +1,176 @@
+/* 双侧边栏浮动布局 CSS */
+:root {
+  --toc-width: 240px;
+  --gap: 24px;
+}
+
+/* 左侧目录浮动布局 */
+.toc-container.wide {
+  position: absolute;
+  left: calc((var(--toc-width) + var(--gap)) * -0.85);
+  width: var(--toc-width);
+  z-index: 10;
+}
+
+.wide .toc {
+  position: sticky;
+  top: var(--gap);
+  background: var(--entry);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 1rem;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.toc details {
+  margin: 0;
+}
+
+.toc summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary);
+}
+
+.toc .inner {
+  margin-top: 0.5rem;
+}
+
+.toc nav ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.toc nav ul ul {
+  padding-left: 1rem;
+  margin-top: 0.3rem;
+}
+
+.toc nav li {
+  margin: 0.3rem 0;
+}
+
+.toc nav a {
+  color: var(--secondary);
+  text-decoration: none;
+  display: block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.toc nav a:hover {
+  background: var(--tertiary);
+  color: var(--primary);
+}
+
+/* 右侧最新文章浮动布局 */
+.recent-container.wide {
+  position: absolute;
+  right: calc((var(--toc-width) + var(--gap)) * -0.85);
+  width: var(--toc-width);
+  z-index: 10;
+}
+
+.wide .recent {
+  position: sticky;
+  top: var(--gap);
+  background: var(--entry);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 1rem;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.recent h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  color: var(--primary);
+  font-weight: 600;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.5rem;
+}
+
+.recent-post-item {
+  margin: 1rem 0;
+  padding: 0.8rem;
+  background: var(--theme);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.recent-post-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.recent-post-header h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+.recent-post-header h4 a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.recent-post-header h4 a:hover {
+  color: var(--tertiary);
+}
+
+.recent-post-meta {
+  font-size: 0.8rem;
+  color: var(--secondary);
+}
+
+/* 主内容区域保持默认样式 */
+.post-single {
+  position: relative;
+}
+
+/* 滚动条美化 */
+.wide .toc::-webkit-scrollbar,
+.wide .recent::-webkit-scrollbar {
+  width: 6px;
+}
+
+.wide .toc::-webkit-scrollbar-track,
+.wide .recent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wide .toc::-webkit-scrollbar-thumb,
+.wide .recent::-webkit-scrollbar-thumb {
+  background: var(--tertiary);
+  border-radius: 3px;
+}
+
+.wide .toc::-webkit-scrollbar-thumb:hover,
+.wide .recent::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* 响应式设计 - 只在大屏幕显示侧边栏 */
+@media (min-width: 1400px) {
+  .toc-container.wide,
+  .recent-container.wide {
+    display: block;
+  }
+}
+
+@media (max-width: 1399px) {
+  .toc-container.wide,
+  .recent-container.wide {
+    display: none !important;
+  }
+}

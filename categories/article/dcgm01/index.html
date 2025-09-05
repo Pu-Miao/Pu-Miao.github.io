@@ -10,7 +10,7 @@
 <meta name="description" content="详细介绍NVIDIA数据中心GPU管理器(DCGM)的安装、配置和使用，包括GPU监控、健康检查、性能诊断等核心功能">
 <meta name="author" content="Miao16">
 <link rel="canonical" href="https://www.itwp.cn/categories/article/dcgm01/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f684a1aeb9d1e27f95b8bdbb85bac3cd5f507923c7ca332a02144280dd03b410.css" integrity="sha256-9oShrrnR4n&#43;VuL27hbrDzV9QeSPHyjMqAhRCgN0DtBA=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://www.itwp.cn/imag/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://www.itwp.cn/imag/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="https://www.itwp.cn/imag/favicon.ico">
@@ -55,7 +55,10 @@
         }
 
     </style>
-</noscript><meta name="baidu-site-verification" content="codeva-gOQzLrFGEh" /><meta name="msvalidate.01" content="C71489B8D8810085B33E1FACB88FA2C8" /><script async src="https://api.busuanzi.cc/static/3.6.9/busuanzi.min.js"></script><meta property="og:url" content="https://www.itwp.cn/categories/article/dcgm01/">
+</noscript><link rel="preload" href="/fonts/LXGWWenKaiMono-Light.ttf" as="font" type="font/ttf" crossorigin><meta name="baidu-site-verification" content="codeva-gOQzLrFGEh" /><meta name="msvalidate.01" content="C71489B8D8810085B33E1FACB88FA2C8" /><script async src="https://api.busuanzi.cc/static/3.6.9/busuanzi.min.js"></script>
+<link rel="stylesheet" href="/css/extended/fonts.min.css">
+<link rel="stylesheet" href="/css/extended/custom.min.css">
+<link rel="stylesheet" href="/css/extended/toc.min.css"><meta property="og:url" content="https://www.itwp.cn/categories/article/dcgm01/">
   <meta property="og:site_name" content="Miao16">
   <meta property="og:title" content="NVIDIA DCGM01">
   <meta property="og:description" content="详细介绍NVIDIA数据中心GPU管理器(DCGM)的安装、配置和使用，包括GPU监控、健康检查、性能诊断等核心功能">
@@ -171,11 +174,6 @@
         </div>
         <ul id="menu">
             <li>
-                <a href="https://www.itwp.cn/" title="主页">
-                    <span>主页</span>
-                </a>
-            </li>
-            <li>
                 <a href="https://www.itwp.cn/search/" title="搜索 (Alt &#43; /)" accesskey=/>
                     <span>搜索</span>
                 </a>
@@ -213,17 +211,159 @@
 
 <article class="post-single">
   <header class="post-header">
-    
     <h1 class="post-title entry-hint-parent">
       NVIDIA DCGM01
     </h1>
     <div class="post-description">
       详细介绍NVIDIA数据中心GPU管理器(DCGM)的安装、配置和使用，包括GPU监控、健康检查、性能诊断等核心功能
     </div>
-    <div class="post-meta"><span title='2024-06-05 17:38:00 +0800 CST'>2024年06月05日</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;565 words&nbsp;·&nbsp;Miao16
-
-</div>
+    <div class="post-meta"><span title='2024-06-05 17:38:00 +0800 CST'>2024年06月05日</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;565 words&nbsp;·&nbsp;Miao16</div>
   </header> 
+<div class="toc-container wide">
+  <div class="toc">
+    <div class="toc-header">
+      <span class="toc-title">目录</span>
+    </div>
+    <div class="inner">
+      <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#什么是nvidia-dcgm">什么是NVIDIA DCGM？</a></li>
+        <li><a href="#核心功能特性">核心功能特性</a></li>
+        <li><a href="#支持平台">支持平台</a></li>
+        <li><a href="#相关资源">相关资源</a></li>
+      </ul>
+    </li>
+    <li><a href="#安装dcgm">安装DCGM</a>
+      <ul>
+        <li><a href="#ubuntu-2204-环境部署">Ubuntu 22.04 环境部署</a></li>
+      </ul>
+    </li>
+    <li><a href="#dcgm基础使用">DCGM基础使用</a>
+      <ul>
+        <li><a href="#启动nv-hostengine">启动nv-hostengine</a></li>
+        <li><a href="#设备发现和管理">设备发现和管理</a></li>
+      </ul>
+    </li>
+    <li><a href="#监控和诊断功能">监控和诊断功能</a>
+      <ul>
+        <li><a href="#统计监控">统计监控</a></li>
+        <li><a href="#健康检查">健康检查</a></li>
+        <li><a href="#诊断测试">诊断测试</a></li>
+        <li><a href="#nvlink监控">NVLink监控</a></li>
+      </ul>
+    </li>
+    <li><a href="#配置管理">配置管理</a>
+      <ul>
+        <li><a href="#查看和修改gpu配置">查看和修改GPU配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#策略管理">策略管理</a>
+      <ul>
+        <li><a href="#告警策略配置">告警策略配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#dcgm-profiling性能分析">DCGM Profiling性能分析</a>
+      <ul>
+        <li><a href="#功能要求">功能要求</a></li>
+        <li><a href="#可获取的性能指标">可获取的性能指标</a></li>
+      </ul>
+    </li>
+    <li><a href="#常用功能">常用功能</a>
+      <ul>
+        <li><a href="#1-日常监控">1. 日常监控</a></li>
+        <li><a href="#2-故障排查">2. 故障排查</a></li>
+        <li><a href="#3-性能优化">3. 性能优化</a></li>
+        <li><a href="#4-集群管理">4. 集群管理</a></li>
+      </ul>
+    </li>
+    <li><a href="#个人实践经验">个人实践经验</a>
+      <ul>
+        <li><a href="#运维要点">运维要点</a></li>
+        <li><a href="#监控集成">监控集成</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+
+<div class="recent-container wide">
+  <div class="recent">
+    <h3>最新文章</h3>
+    <div class="recent-posts-list">
+      <article class="recent-post-item">
+        <div class="recent-post-header">
+          <h4><a href="https://www.itwp.cn/categories/article/cudnn01/" title="Ubuntu安装CuDNN 9.10.1">
+            
+              Ubuntu安装CuDNN 9.10.1
+            
+          </a></h4>
+        </div>
+        <div class="recent-post-meta">
+          <time>2025-08-24</time>
+          <span class="author">Miao16</span>
+        </div>
+      </article>
+      <article class="recent-post-item">
+        <div class="recent-post-header">
+          <h4><a href="https://www.itwp.cn/categories/article/gdr01/" title="[问题记录]GDR模块无法构建,重新编译nvidia-peermem">
+            
+              [问题记录]GDR模块无法构建,重新编译nvidi...
+            
+          </a></h4>
+        </div>
+        <div class="recent-post-meta">
+          <time>2025-06-14</time>
+          <span class="author">Miao16</span>
+        </div>
+      </article>
+      <article class="recent-post-item">
+        <div class="recent-post-header">
+          <h4><a href="https://www.itwp.cn/categories/article/windows-bond/" title="Windows Server网卡Bond配置指南">
+            
+              Windows Server网卡Bond配置指南...
+            
+          </a></h4>
+        </div>
+        <div class="recent-post-meta">
+          <time>2024-12-02</time>
+          <span class="author">Miao16</span>
+        </div>
+      </article>
+      <article class="recent-post-item">
+        <div class="recent-post-header">
+          <h4><a href="https://www.itwp.cn/categories/article/dcgm01/" title="NVIDIA DCGM01">
+            
+              NVIDIA DCGM01
+            
+          </a></h4>
+        </div>
+        <div class="recent-post-meta">
+          <time>2024-06-05</time>
+          <span class="author">Miao16</span>
+        </div>
+      </article>
+      <article class="recent-post-item">
+        <div class="recent-post-header">
+          <h4><a href="https://www.itwp.cn/categories/article/mellanox_cmd01/" title="Mellanox网卡常用命令详解">
+            
+              Mellanox网卡常用命令详解...
+            
+          </a></h4>
+        </div>
+        <div class="recent-post-meta">
+          <time>2024-02-07</time>
+          <span class="author">Miao16</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+
   <div class="post-content"><h3 id="什么是nvidia-dcgm">什么是NVIDIA DCGM？<a hidden class="anchor" aria-hidden="true" href="#什么是nvidia-dcgm">#</a></h3>
 <p><strong>NVIDIA 数据中心 GPU 管理器 (DCGM)</strong> 是一套专为管理和监控集群环境中的 NVIDIA 数据中心 GPU 而设计的综合工具集。它为数据中心提供了企业级的GPU管理解决方案。</p>
 <h3 id="核心功能特性">核心功能特性<a hidden class="anchor" aria-hidden="true" href="#核心功能特性">#</a></h3>
@@ -688,8 +828,7 @@
   </div>
 
   <footer class="post-footer">
-    <ul class="post-tags">
-    </ul>
+  </footer>
 <nav class="paginav">
   <a class="prev" href="https://www.itwp.cn/categories/article/windows-bond/">
     <span class="title">« Prev</span>
@@ -703,7 +842,6 @@
   </a>
 </nav>
 
-  </footer>
 </article>
     </main>
     

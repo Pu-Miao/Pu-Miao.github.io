@@ -10,7 +10,7 @@
 <meta name="description" content="在Ubuntu系统上部署NVIDIA驱动、CUDA和相关服务配置">
 <meta name="author" content="Miao16">
 <link rel="canonical" href="https://www.itwp.cn/categories/article/ubuntu-nvidia/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.8fe10233a706bc87f2e08b3cf97b8bd4c0a80f10675a143675d59212121037c0.css" integrity="sha256-j&#43;ECM6cGvIfy4Is8&#43;XuL1MCoDxBnWhQ2ddWSEhIQN8A=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.f684a1aeb9d1e27f95b8bdbb85bac3cd5f507923c7ca332a02144280dd03b410.css" integrity="sha256-9oShrrnR4n&#43;VuL27hbrDzV9QeSPHyjMqAhRCgN0DtBA=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://www.itwp.cn/imag/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://www.itwp.cn/imag/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="https://www.itwp.cn/imag/favicon.ico">
@@ -55,7 +55,10 @@
         }
 
     </style>
-</noscript><meta name="baidu-site-verification" content="codeva-gOQzLrFGEh" /><meta name="msvalidate.01" content="C71489B8D8810085B33E1FACB88FA2C8" /><script async src="https://api.busuanzi.cc/static/3.6.9/busuanzi.min.js"></script><meta property="og:url" content="https://www.itwp.cn/categories/article/ubuntu-nvidia/">
+</noscript><link rel="preload" href="/fonts/LXGWWenKaiMono-Light.ttf" as="font" type="font/ttf" crossorigin><meta name="baidu-site-verification" content="codeva-gOQzLrFGEh" /><meta name="msvalidate.01" content="C71489B8D8810085B33E1FACB88FA2C8" /><script async src="https://api.busuanzi.cc/static/3.6.9/busuanzi.min.js"></script>
+<link rel="stylesheet" href="/css/extended/fonts.min.css">
+<link rel="stylesheet" href="/css/extended/custom.min.css">
+<link rel="stylesheet" href="/css/extended/toc.min.css"><meta property="og:url" content="https://www.itwp.cn/categories/article/ubuntu-nvidia/">
   <meta property="og:site_name" content="Miao16">
   <meta property="og:title" content="Ubuntu NVIDIA驱动部署">
   <meta property="og:description" content="在Ubuntu系统上部署NVIDIA驱动、CUDA和相关服务配置">
@@ -171,11 +174,6 @@
         </div>
         <ul id="menu">
             <li>
-                <a href="https://www.itwp.cn/" title="主页">
-                    <span>主页</span>
-                </a>
-            </li>
-            <li>
                 <a href="https://www.itwp.cn/search/" title="搜索 (Alt &#43; /)" accesskey=/>
                     <span>搜索</span>
                 </a>
@@ -213,17 +211,140 @@
 
 <article class="post-single">
   <header class="post-header">
-    
     <h1 class="post-title entry-hint-parent">
       Ubuntu NVIDIA驱动部署
     </h1>
     <div class="post-description">
       在Ubuntu系统上部署NVIDIA驱动、CUDA和相关服务配置
     </div>
-    <div class="post-meta"><span title='2023-08-24 17:00:00 +0800 CST'>2023年08月24日</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;482 words&nbsp;·&nbsp;Miao16
-
-</div>
+    <div class="post-meta"><span title='2023-08-24 17:00:00 +0800 CST'>2023年08月24日</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;482 words&nbsp;·&nbsp;Miao16</div>
   </header> 
+<div class="toc-container wide">
+  <div class="toc">
+    <div class="toc-header">
+      <span class="toc-title">目录</span>
+    </div>
+    <div class="inner">
+      <nav id="TableOfContents">
+  <ul>
+    <li><a href="#一-基础环境准备">一. 基础环境准备</a>
+      <ul>
+        <li><a href="#1-系统优化">1. 系统优化</a></li>
+        <li><a href="#2-依赖安装">2. 依赖安装</a></li>
+      </ul>
+    </li>
+    <li><a href="#二-驱动下载">二. 驱动下载</a>
+      <ul>
+        <li><a href="#1-nvidia-driver下载">1. NVIDIA Driver下载</a></li>
+        <li><a href="#2-cuda下载">2. CUDA下载</a></li>
+        <li><a href="#3-nvidia-fabric-manager下载">3. NVIDIA Fabric Manager下载</a></li>
+      </ul>
+    </li>
+    <li><a href="#三-驱动安装">三. 驱动安装</a>
+      <ul>
+        <li><a href="#1-nvidia-driver安装">1. NVIDIA Driver安装</a></li>
+        <li><a href="#2-cuda安装">2. CUDA安装</a></li>
+        <li><a href="#3-nvidia-fabric-manager安装">3. NVIDIA Fabric Manager安装</a></li>
+      </ul>
+    </li>
+    <li><a href="#四-服务配置">四. 服务配置</a>
+      <ul>
+        <li><a href="#1-nvidia-fabric-manager服务">1. NVIDIA Fabric Manager服务</a></li>
+        <li><a href="#2-nvidia-persistence-daemon">2. NVIDIA Persistence Daemon</a></li>
+      </ul>
+    </li>
+    <li><a href="#五-环境配置">五. 环境配置</a>
+      <ul>
+        <li><a href="#1-cuda环境设置">1. CUDA环境设置</a></li>
+      </ul>
+    </li>
+    <li><a href="#六-环境验证">六. 环境验证</a>
+      <ul>
+        <li><a href="#1-nvidia-smi验证">1. nvidia-smi验证</a></li>
+        <li><a href="#2-nvidia-fabric-manager">2. NVIDIA Fabric Manager</a></li>
+        <li><a href="#3-nvidia-persistence-daemon验证">3. NVIDIA Persistence Daemon验证</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+  </div>
+</div>
+
+<div class="recent-container wide">
+  <div class="recent">
+    <h3>最新文章</h3>
+    <div class="recent-posts-list">
+      <article class="recent-post-item">
+        <div class="recent-post-header">
+          <h4><a href="https://www.itwp.cn/categories/article/cudnn01/" title="Ubuntu安装CuDNN 9.10.1">
+            
+              Ubuntu安装CuDNN 9.10.1
+            
+          </a></h4>
+        </div>
+        <div class="recent-post-meta">
+          <time>2025-08-24</time>
+          <span class="author">Miao16</span>
+        </div>
+      </article>
+      <article class="recent-post-item">
+        <div class="recent-post-header">
+          <h4><a href="https://www.itwp.cn/categories/article/gdr01/" title="[问题记录]GDR模块无法构建,重新编译nvidia-peermem">
+            
+              [问题记录]GDR模块无法构建,重新编译nvidi...
+            
+          </a></h4>
+        </div>
+        <div class="recent-post-meta">
+          <time>2025-06-14</time>
+          <span class="author">Miao16</span>
+        </div>
+      </article>
+      <article class="recent-post-item">
+        <div class="recent-post-header">
+          <h4><a href="https://www.itwp.cn/categories/article/windows-bond/" title="Windows Server网卡Bond配置指南">
+            
+              Windows Server网卡Bond配置指南...
+            
+          </a></h4>
+        </div>
+        <div class="recent-post-meta">
+          <time>2024-12-02</time>
+          <span class="author">Miao16</span>
+        </div>
+      </article>
+      <article class="recent-post-item">
+        <div class="recent-post-header">
+          <h4><a href="https://www.itwp.cn/categories/article/dcgm01/" title="NVIDIA DCGM01">
+            
+              NVIDIA DCGM01
+            
+          </a></h4>
+        </div>
+        <div class="recent-post-meta">
+          <time>2024-06-05</time>
+          <span class="author">Miao16</span>
+        </div>
+      </article>
+      <article class="recent-post-item">
+        <div class="recent-post-header">
+          <h4><a href="https://www.itwp.cn/categories/article/mellanox_cmd01/" title="Mellanox网卡常用命令详解">
+            
+              Mellanox网卡常用命令详解...
+            
+          </a></h4>
+        </div>
+        <div class="recent-post-meta">
+          <time>2024-02-07</time>
+          <span class="author">Miao16</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>
+
+
   <div class="post-content"><h2 id="一-基础环境准备">一. 基础环境准备<a hidden class="anchor" aria-hidden="true" href="#一-基础环境准备">#</a></h2>
 <h3 id="1-系统优化">1. 系统优化<a hidden class="anchor" aria-hidden="true" href="#1-系统优化">#</a></h3>
 <h4 id="1-锁定内核版本">1. 锁定内核版本<a hidden class="anchor" aria-hidden="true" href="#1-锁定内核版本">#</a></h4>
@@ -534,8 +655,7 @@
   </div>
 
   <footer class="post-footer">
-    <ul class="post-tags">
-    </ul>
+  </footer>
 <nav class="paginav">
   <a class="prev" href="https://www.itwp.cn/categories/article/no_gpu/">
     <span class="title">« Prev</span>
@@ -549,7 +669,6 @@
   </a>
 </nav>
 
-  </footer>
 </article>
     </main>
     
